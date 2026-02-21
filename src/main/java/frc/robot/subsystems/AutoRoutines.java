@@ -9,17 +9,17 @@ import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.ClimberUpNew;
+import frc.robot.commands.ClimberUp;
 import frc.robot.commands.IndexerRun;
 import frc.robot.commands.IndexerStop;
 import frc.robot.commands.IntakeDown;
-import frc.robot.commands.IntakeDownNew;
-import frc.robot.commands.IntakeUpNew;
+import frc.robot.commands.IntakeDown;
+import frc.robot.commands.IntakeUp;
 import frc.robot.commands.RunIntake;
-import frc.robot.commands.RunNewIntake;
+import frc.robot.commands.RunIntake;
 import frc.robot.commands.ShooterRun;
 import frc.robot.commands.ShooterStop;
-import frc.robot.commands.StopNewIntake;
+import frc.robot.commands.StopIntake;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Indexer;
@@ -61,18 +61,18 @@ public class AutoRoutines extends SubsystemBase {
         final AutoTrajectory POS1PickShootClimbPath2 = routine.trajectory("POS1PickShootClimb2");
         routine.active().onTrue(
             POS1PickShootClimbPath1.resetOdometry()
-            .andThen(new IntakeDownNew(m_intakepos))
-              .andThen(new RunNewIntake(m_intake))
+            .andThen(new IntakeDown(m_intakepos))
+              .andThen(new RunIntake(m_intake))
                .andThen(new ShooterRun(m_shooter))
                 .andThen(POS1PickShootClimbPath1.cmd())
                   .andThen(new IndexerRun(m_indexer))
                     .andThen(new WaitCommand(5.0))
                       .andThen(new IndexerStop(m_indexer))
                         .andThen(new ShooterStop(m_shooter))
-                          .andThen(new StopNewIntake(m_intake))
-                           .andThen(new IntakeUpNew(m_intakepos))
+                          .andThen(new StopIntake(m_intake))
+                           .andThen(new IntakeUp(m_intakepos))
                             .andThen(POS1PickShootClimbPath2.cmd())
-                              .andThen(new ClimberUpNew(m_climber))
+                              .andThen(new ClimberUp(m_climber))
                   
         );                                                                                                                
         return routine;
