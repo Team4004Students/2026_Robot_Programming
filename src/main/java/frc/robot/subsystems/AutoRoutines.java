@@ -80,79 +80,117 @@ public class AutoRoutines extends SubsystemBase {
 
      public AutoRoutine POS3loadShoot() {
         final AutoRoutine routine = m_factory.newRoutine("POS3loadShoot Auto");
-        final AutoTrajectory POS3loadShootPath = routine.trajectory("POS3loadShoot");
-
+        final AutoTrajectory POS3loadShootPath1 = routine.trajectory("POS3loadShoot1");
+        final AutoTrajectory POS3loadShootPath2 = routine.trajectory("POS3loadShoot2");
         routine.active().onTrue(
-            POS3loadShootPath.resetOdometry()
-                .andThen(POS3loadShootPath.cmd())
+            POS3loadShootPath1.resetOdometry()
+                .andThen(POS3loadShootPath1.cmd())
+                 .andThen(new ShooterRun(m_shooter))
+                  .andThen(new WaitCommand(5.0))
+                   .andThen(POS3loadShootPath2.cmd())
+                     .andThen(new IndexerRun(m_indexer))
         );                                                                                                                
         return routine;
     }
 
      public AutoRoutine POS2BackShootClimb() {
         final AutoRoutine routine = m_factory.newRoutine("POS2BackShootClimb Auto");
-        final AutoTrajectory POS2BackShootClimbPath = routine.trajectory("POS2BackShootClimb");
-
+        final AutoTrajectory POS2BackShootClimbPath1 = routine.trajectory("POS2BackShootClimb1");
+        final AutoTrajectory POS2BackShootClimbPath2 = routine.trajectory("POS2BackShootClimb2");
         routine.active().onTrue(
-            POS2BackShootClimbPath.resetOdometry()
-                .andThen(POS2BackShootClimbPath.cmd())
+            POS2BackShootClimbPath1.resetOdometry()
+                .andThen(POS2BackShootClimbPath1.cmd())
+                 .andThen(new ShooterRun(m_shooter))
+                  .andThen(new IndexerRun(m_indexer))
+                   .andThen(new ShooterStop(m_shooter))
+                    .andThen(new IndexerStop(m_indexer))
+                     .andThen(POS2BackShootClimbPath2.cmd())
+                        .andThen(new ClimberUp(m_climber))
         );                                                                                                                
         return routine;
     }
 
      public AutoRoutine POS1PickShoot() {
         final AutoRoutine routine = m_factory.newRoutine("POS1PickShoot Auto");
-        final AutoTrajectory POS1PickShootPath = routine.trajectory("POS1PickShoot");
+        final AutoTrajectory POS1PickShootPath1 = routine.trajectory("POS1PickShoot1");
+        final AutoTrajectory POS1PickShootPath2 = routine.trajectory("POS1PickShoot2");
 
         routine.active().onTrue(
-            POS1PickShootPath.resetOdometry()
-                .andThen(POS1PickShootPath.cmd())
+            POS1PickShootPath1.resetOdometry()
+             .andThen(new IntakeDown(m_intakepos))
+                .andThen(new RunIntake(m_intake))
+                    .andThen(POS1PickShootPath1.cmd())
+                        .andThen(new StopIntake(m_intake))
+                            .andThen(new ShooterRun(m_shooter))
+                                .andThen(POS1PickShootPath2.cmd())
+                                    .andThen(new IndexerRun(m_indexer))
         );                                                                                                                
         return routine;
     }
 
      public AutoRoutine POS3loadShootClimb() {
         final AutoRoutine routine = m_factory.newRoutine("POS3loadShootClimb Auto");
-        final AutoTrajectory POS3loadShootClimbPath = routine.trajectory("POS3loadShootClimb");
+        final AutoTrajectory POS3loadShootClimbPath1 = routine.trajectory("POS3loadShootClimb1");
+        final AutoTrajectory POS3loadShootClimbPath2 = routine.trajectory("POS3loadShootClimb2");
+        final AutoTrajectory POS3loadShootClimbPath3 = routine.trajectory("POS3loadShootClimb3");
 
         routine.active().onTrue(
-            POS3loadShootClimbPath.resetOdometry()
-                .andThen(POS3loadShootClimbPath.cmd())
+            POS3loadShootClimbPath1.resetOdometry()
+                .andThen(POS3loadShootClimbPath1.cmd())
+                    .andThen(new ShooterRun(m_shooter))
+                        .andThen(new WaitCommand(5.0))
+                            .andThen(POS3loadShootClimbPath2.cmd())
+                                .andThen(new IndexerRun(m_indexer))
+                                    .andThen(new ShooterStop(m_shooter))
+                                        .andThen(new IndexerStop(m_indexer))
+                                            .andThen(new IntakeUp(m_intakepos))
+                                                .andThen(POS3loadShootClimbPath3.cmd())
+                                                    .andThen(new ClimberUp(m_climber))
         );                                                                                                                
         return routine;
     }
 
      public AutoRoutine POS4Bump() {
         final AutoRoutine routine = m_factory.newRoutine("POS4Bump Auto");
-        final AutoTrajectory POS4BumpPath = routine.trajectory("POS4Bump");
+        final AutoTrajectory POS4BumpPath1 = routine.trajectory("POS4Bump1");
+        final AutoTrajectory POS4BumpPath2 = routine.trajectory("POS4Bump2");
 
         routine.active().onTrue(
-            POS4BumpPath.resetOdometry()
-                .andThen(POS4BumpPath.cmd())
+            POS4BumpPath1.resetOdometry()
+                .andThen(POS4BumpPath1.cmd())
+                    .andThen(new IntakeDown(m_intakepos))
+                        .andThen(new RunIntake(m_intake))
+                            .andThen(POS4BumpPath2.cmd())
         );                                                                                                                
         return routine;
     }
 
-     public AutoRoutine POS5Bump() {
+      public AutoRoutine POS5Bump() {
         final AutoRoutine routine = m_factory.newRoutine("POS5Bump Auto");
-        final AutoTrajectory POS5BumpPath = routine.trajectory("POS5Bump");
+        final AutoTrajectory POS5BumpPath1 = routine.trajectory("POS5Bump1");
+        final AutoTrajectory POS5BumpPath2 = routine.trajectory("POS5Bump2");
 
         routine.active().onTrue(
-            POS5BumpPath.resetOdometry()
-                .andThen(POS5BumpPath.cmd())
+            POS5BumpPath1.resetOdometry()
+                .andThen(POS5BumpPath1.cmd())
+                    .andThen(new IntakeDown(m_intakepos))
+                        .andThen(new RunIntake(m_intake))
+                            .andThen(POS5BumpPath2.cmd())
         );                                                                                                                
         return routine;
     }
 
      public AutoRoutine ScrewYou() {
         final AutoRoutine routine = m_factory.newRoutine("ScrewYou Auto");
-        final AutoTrajectory ScrewYouPath = routine.trajectory("ScrewYou");
+        final AutoTrajectory ScrewYouPath1 = routine.trajectory("ScrewYou1");
+        final AutoTrajectory ScrewYouPath2 = routine.trajectory("ScrewYou2");
 
         routine.active().onTrue(
-            ScrewYouPath.resetOdometry()
+            ScrewYouPath1.resetOdometry()
+            .andThen(ScrewYouPath1.cmd())
               .andThen(new IntakeDown(m_intakepos))
                .andThen(new RunIntake(m_intake))
-                .andThen(ScrewYouPath.cmd())
+                .andThen(ScrewYouPath2.cmd())
         );                                                                                                                
         return routine;
     }
