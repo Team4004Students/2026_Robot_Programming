@@ -11,14 +11,15 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.CANcoder;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
@@ -31,15 +32,19 @@ public class IntakePosition extends SubsystemBase {
   private TalonFX intakePositionMotor;
   private DigitalInput bottomSensor;
   private DigitalInput topSensor;
-   private CANcoder encoder;
+  private CANcoder encoder;
+
+  private NetworkTable intakePosTable = NetworkTableInstance.getDefault().getTable("intake position");
 
   /** Creates a new IntakePosition. */
   public IntakePosition() {
     intakePositionMotor = new TalonFX(32);
     config = new TalonFXConfiguration();
-    encoder = new CANcoder(24);
-    config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-    config.Feedback.FeedbackRemoteSensorID = 24;
+    //encoder = new CANcoder(24);
+
+    config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+    //config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+    //config.Feedback.FeedbackRemoteSensorID = 24;
 
      /** MotionMagic Configs */
     MotionMagicConfigs motionMagic = config.MotionMagic;
@@ -64,21 +69,23 @@ public class IntakePosition extends SubsystemBase {
     
   }
 
+  public double getIntakePositionValue() {
+    return intakePositionMotor.getPosition().getValueAsDouble();
+  }
+
   public void intakeUpPosition() {
-    intakePositionMotor.setControl(new MotionMagicVelocityVoltage(75.0));
-    intakePositionMotor.getPosition();
+    intakePositionMotor.setControl(new MotionMagicVoltage(75.0));
   }
 
   public void intakeDownPosition() {
-    intakePositionMotor.setControl(new MotionMagicVelocityVoltage(-90.0));
-    intakePositionMotor.getPosition();
+    intakePositionMotor.setControl(new MotionMagicVoltage(-90.0));
   }
 
   public void stopIntake() {
-    intakePositionMotor.setControl(new MotionMagicVelocityVoltage(0.0));
+    intakePositionMotor.setControl(new VoltageOut(0.0));
   }
 
-    public boolean isDeployed(){
+  public boolean isDeployed(){
     return bottomSensor.get();
   }
 
@@ -90,5 +97,6 @@ public class IntakePosition extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    intakePosTable.getEntry("Intake Position Encoder").setDouble(this.getIntakePositionValue());
   }
 }

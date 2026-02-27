@@ -12,6 +12,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
@@ -48,15 +49,15 @@ public class Intake extends SubsystemBase {
   }
 
   public void runIntake() {
-    intakeMotor.setControl(new MotionMagicVelocityVoltage(75.0));
+    intakeMotor.set(0.75);
   }
 
   public void reverseIntake() {
-    intakeMotor.setControl(new MotionMagicVelocityVoltage(-90.0));
+    intakeMotor.set(-0.75);
   }
 
   public void stopIntake() {
-    intakeMotor.setControl(new MotionMagicVelocityVoltage(0.0));
+    intakeMotor.setControl(new VoltageOut(0.0));
   }
 
   @Override

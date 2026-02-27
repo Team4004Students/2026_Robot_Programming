@@ -2,10 +2,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
@@ -15,9 +13,7 @@ import frc.robot.commands.ClimberUp;
 import frc.robot.commands.IndexerRun;
 import frc.robot.commands.IndexerStop;
 import frc.robot.commands.IntakeDown;
-import frc.robot.commands.IntakeDown;
 import frc.robot.commands.IntakeUp;
-import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.ShooterRun;
 import frc.robot.commands.ShooterStop;
@@ -28,7 +24,7 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakePosition;
 import frc.robot.subsystems.Shooter;
 
-public class AutoRoutines extends SubsystemBase {
+public class AutoRoutines {
   /** Creates a new AutoRoutines. */
     private final AutoFactory m_factory;
     private final Climber m_climber;
@@ -251,10 +247,5 @@ public class AutoRoutines extends SubsystemBase {
             .andThen(scoreCoralSideThreeFromFeederStation.cmd())
         );
         return routine;
-    }
-
-    @Override
-    public void periodic() {
-      // This method will be called once per scheduler run
     }
 }

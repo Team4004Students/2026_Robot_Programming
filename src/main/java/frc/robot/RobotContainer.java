@@ -8,9 +8,12 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import choreo.auto.AutoChooser;
+import choreo.auto.AutoFactory;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -68,7 +71,44 @@ public class RobotContainer {
     public final Indexer indexer = new Indexer(() -> steerJoystick.button(7).getAsBoolean());
     public final Climber climber = new Climber();
 
+    /* Path follower */
+    private final AutoFactory autoFactory;
+    private final AutoRoutines autoRoutines;
+    private final AutoChooser autoChooser = new AutoChooser();
+
     public RobotContainer() {
+        //INITIALIZE PATH FOLLOWING
+        autoFactory = drivetrain.createAutoFactory();
+        autoRoutines = new AutoRoutines(autoFactory, climber, intake, shooter, indexer, intakePosition);
+
+        //TEST AUTOS
+        //autoChooser.addRoutine("SimplePath", autoRoutines::simplePathAuto);
+        //autoChooser.addRoutine("SimpleMultiPath", autoRoutines::simpleMultiPathAuto);
+
+        //POS1 AUTOS
+        autoChooser.addRoutine("POS1PickShoot Auto", autoRoutines::POS1PickShoot);
+        autoChooser.addRoutine("POS1PickShootClimb Auto", autoRoutines::POS1PickShootClimb);
+
+        //POS2 AUTOS
+        autoChooser.addRoutine("POS2BackShootClimb Auto", autoRoutines::POS2BackShootClimb);
+
+        //POS3 AUTOS
+        autoChooser.addRoutine("POS3LoadShoot Auto", autoRoutines::POS3loadShoot);
+        autoChooser.addRoutine("POS3LoadShootClimb Auto", autoRoutines::POS3loadShootClimb);
+
+        //POS4 AUTOS
+        autoChooser.addRoutine("POS4Bump Auto", autoRoutines::POS4Bump);
+        
+        //POS5 AUTOS
+        autoChooser.addRoutine("POS5Bump Auto", autoRoutines::POS5Bump);
+        autoChooser.addRoutine("Screw You Auto", autoRoutines::ScrewYou);
+        autoChooser.addRoutine("Paul Auto", autoRoutines::Paul);
+
+
+        //AUTO CHOSER
+        SmartDashboard.putData("Auto Chooser", autoChooser);
+
+
         configureBindings();
     }
 
@@ -136,6 +176,11 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
+        return autoChooser.selectedCommand();
+        
+        //return Commands.print("No autonomous command configured");
+        
+        /*
         // Simple drive forward auton
         final var idle = new SwerveRequest.Idle();
         return Commands.sequence(
@@ -152,5 +197,6 @@ public class RobotContainer {
             // Finally idle for the rest of auton
             drivetrain.applyRequest(() -> idle)
         );
+        */
     }
 }
