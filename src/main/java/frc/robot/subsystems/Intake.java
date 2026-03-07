@@ -17,13 +17,17 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Second;
+import java.util.function.BooleanSupplier;
 
 
 public class Intake extends SubsystemBase {
   private TalonFXConfiguration config;
   private TalonFX intakeMotor;
+  private BooleanSupplier reverseSwitch;
+
   /** Creates a new Intake2026. */
-  public Intake() {
+  public Intake(BooleanSupplier reverseSwitch) {
+    this.reverseSwitch = reverseSwitch;
     intakeMotor = new TalonFX(33);
     config = new TalonFXConfiguration();
 
@@ -49,11 +53,9 @@ public class Intake extends SubsystemBase {
   }
 
   public void runIntake() {
-    intakeMotor.set(0.75);
-  }
-
-  public void reverseIntake() {
-    intakeMotor.set(-0.75);
+    double intakeSpeed = 0.75;
+    if (reverseSwitch.getAsBoolean()) {intakeSpeed *= -1;}    
+    intakeMotor.set(intakeSpeed);
   }
 
   public void stopIntake() {

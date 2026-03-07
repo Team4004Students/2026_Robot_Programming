@@ -9,30 +9,31 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IntakeReverse extends Command {
+public class IntakeRun extends Command {
   private Intake intake;
-  /** Creates a new ReverseIntake. */
-  public IntakeReverse(Intake copyIntake) {
+  /** Creates a new Runintake. */
+  public IntakeRun(Intake copyIntake) {
     intake = copyIntake;
+    addRequirements(intake);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
-  
-  // Use addRequirements() here to declare subsystem dependencies.
-  
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize(){
-    intake.reverseIntake();
+  public void initialize() {
+    intake.runIntake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stopIntake();
+    
   }
 
   // Returns true when the command should end.

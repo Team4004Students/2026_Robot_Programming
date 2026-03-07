@@ -14,10 +14,10 @@ import frc.robot.commands.IndexerRun;
 import frc.robot.commands.IndexerStop;
 import frc.robot.commands.IntakeDown;
 import frc.robot.commands.IntakeUp;
-import frc.robot.commands.RunIntake;
+import frc.robot.commands.IntakeRun;
 import frc.robot.commands.ShooterRun;
 import frc.robot.commands.ShooterStop;
-import frc.robot.commands.StopIntake;
+import frc.robot.commands.IntakeStop;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Indexer;
@@ -60,10 +60,10 @@ public class AutoRoutines {
         routine.active().onTrue(
             POS1PickShootClimbPath1.resetOdometry()
             .andThen(new IntakeDown(m_intakepos))
-            .andThen(new RunIntake(m_intake))
+            .andThen(new IntakeRun(m_intake))
             .andThen(new ShooterRun(m_shooter))
             .andThen(POS1PickShootClimbPath1.cmd())
-            .andThen(new StopIntake(m_intake))
+            .andThen(new IntakeStop(m_intake))
             .andThen(new IndexerRun(m_indexer))
             .andThen(new WaitCommand(5.0))
             .andThen(new IndexerStop(m_indexer))
@@ -120,9 +120,9 @@ public class AutoRoutines {
         routine.active().onTrue(
             POS1PickShootPath1.resetOdometry()
             .andThen(new IntakeDown(m_intakepos))
-            .andThen(new RunIntake(m_intake))
+            .andThen(new IntakeRun(m_intake))
             .andThen(POS1PickShootPath1.cmd())
-            .andThen(new StopIntake(m_intake))
+            .andThen(new IntakeStop(m_intake))
             .andThen(new ShooterRun(m_shooter))
             .andThen(POS1PickShootPath2.cmd())
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
@@ -174,7 +174,7 @@ public class AutoRoutines {
             .andThen(new IntakeUp(m_intakepos))
             .andThen(POS4BumpPath2.cmd())
             .andThen(new IntakeDown(m_intakepos))
-            .andThen(new RunIntake(m_intake))
+            .andThen(new IntakeRun(m_intake))
             .andThen(POS4BumpPath3.cmd())
         );                                                                                                                
         return routine;
@@ -199,7 +199,7 @@ public class AutoRoutines {
             .andThen(new IntakeUp(m_intakepos))
             .andThen(POS5BumpPath2.cmd())
             .andThen(new IntakeDown(m_intakepos))
-            .andThen(new RunIntake(m_intake))
+            .andThen(new IntakeRun(m_intake))
             .andThen(POS5BumpPath3.cmd())
         );                                                                                                                
         return routine;
@@ -214,7 +214,7 @@ public class AutoRoutines {
             ScrewYouPath1.resetOdometry()
             .andThen(ScrewYouPath1.cmd())
             .andThen(new IntakeDown(m_intakepos))
-            .andThen(new RunIntake(m_intake))
+            .andThen(new IntakeRun(m_intake))
             .andThen(ScrewYouPath2.cmd())
         );                                                                                                                
         return routine;

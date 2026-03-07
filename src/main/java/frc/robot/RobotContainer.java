@@ -27,8 +27,8 @@ import frc.robot.commands.IntakeDown;
 import frc.robot.commands.ClimberDown;
 import frc.robot.commands.ClimberUp;
 import frc.robot.commands.IntakeUp;
-import frc.robot.commands.ReverseIntake;
-import frc.robot.commands.RunIntake;
+import frc.robot.commands.IntakeRun;
+import frc.robot.commands.IntakeStop;
 import frc.robot.commands.ShooterRun;
 import frc.robot.commands.ShooterStop;
 import frc.robot.generated.TunerConstants;
@@ -65,7 +65,7 @@ public class RobotContainer {
     private final CommandJoystick daJoystick = new CommandJoystick(2);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    public final Intake intake = new Intake();
+    public final Intake intake = new Intake(() -> steerJoystick.button(10).getAsBoolean());
     public final IntakePosition intakePosition = new IntakePosition();
     public final Shooter shooter = new Shooter(() -> steerJoystick.button(7).getAsBoolean());
     public final Indexer indexer = new Indexer(() -> steerJoystick.button(7).getAsBoolean());
@@ -115,11 +115,11 @@ public class RobotContainer {
     private void configureBindings() {
         shooter.setDefaultCommand(new ShooterStop(shooter));
         indexer.setDefaultCommand(new IndexerStop(indexer));
+        intake.setDefaultCommand(new IntakeStop(intake));
 
         steerJoystick.button(1).whileTrue(new ClimberUp (climber));
         steerJoystick.button(2).whileTrue(new ClimberDown (climber));
-        daJoystick.button(6).whileTrue(new RunIntake (intake));
-        steerJoystick.button(6).whileTrue(new ReverseIntake (intake));
+        daJoystick.button(6).whileTrue(new IntakeRun (intake));
         daJoystick.button(3).whileTrue(new IntakeDown (intakePosition));
         daJoystick.button(4).whileTrue(new IntakeUp (intakePosition));
 
@@ -139,7 +139,7 @@ public class RobotContainer {
                     .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
                     .withRotationalRate(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-steerJoystick.getX(),Steerdeadband),Exponent) * MaxAngularRate, -TurnSpeedLimit, TurnSpeedLimit)) // Drive counterclockwise with negative X (left)
             )
-        );
+        ); 
 
         driveJoystick.button(10).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
                 drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
@@ -148,7 +148,7 @@ public class RobotContainer {
             )
         );
 
-        driveJoystick.button(3).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
+        driveJoystick.button(9).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
                 drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
                     .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
                     .withRotationalRate(drivetrain.bumpAssist() * MaxAngularRate)) // Drive counterclockwise with negative X (left)
@@ -170,7 +170,7 @@ public class RobotContainer {
 
 
         // Reset the field-centric heading on left bumper press.
-        driveJoystick.button(9).onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        driveJoystick.button(11).onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
