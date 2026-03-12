@@ -6,13 +6,16 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkMax;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import java.util.function.BooleanSupplier;
 
 public class Indexer extends SubsystemBase {
+  private TalonFX rollerMotor;
   private SparkMax indexerMotor;
   private boolean reverseMotor;
   private BooleanSupplier reverseSwitch;
@@ -21,6 +24,7 @@ public class Indexer extends SubsystemBase {
   public Indexer(BooleanSupplier reverseSwitch) {
     this.reverseSwitch = reverseSwitch;
 
+    rollerMotor = new TalonFX(36);
     indexerMotor = new SparkMax(34, MotorType.kBrushed);
 
     reverseMotor = false;
@@ -28,12 +32,15 @@ public class Indexer extends SubsystemBase {
 
   public void runIndexer() {
     double indexerSpeed = 0.5;
-    if (reverseSwitch.getAsBoolean()) {indexerSpeed *= -1;}
+    double rollerSpeed = 0.5;
+    if (reverseSwitch.getAsBoolean()) {indexerSpeed *= -1; rollerSpeed *= -1;}
     indexerMotor.set(indexerSpeed);
+    rollerMotor.set(rollerSpeed);
   }
   
   public void stopIndexer() {
     indexerMotor.set(0.0);
+    rollerMotor.set(0.0);
   }
 
   @Override

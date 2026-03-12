@@ -70,7 +70,7 @@ public class AutoRoutines {
             .andThen(new ShooterStop(m_shooter))
             .andThen(new IntakeUp(m_intakepos))
             .andThen(POS1PickShootClimbPath2.cmd().withTimeout(2.0))
-            .andThen(new ClimberUp(m_climber))
+            .andThen(new ClimberUp(m_climber).withTimeout(4.0))
         );                                                                                                                
         return routine;
     }
@@ -107,7 +107,7 @@ public class AutoRoutines {
             .andThen(new ShooterStop(m_shooter))
             .andThen(new IntakeUp(m_intakepos))
             .andThen(POS2BackShootClimbPath2.cmd().withTimeout(1.5))
-            .andThen(new ClimberUp(m_climber))
+            .andThen(new ClimberUp(m_climber).withTimeout(4.0))
         );                                                                                                                
         return routine;
     }
@@ -150,7 +150,7 @@ public class AutoRoutines {
             .andThen(new ShooterStop(m_shooter))
             .andThen(new IntakeUp(m_intakepos))
             .andThen(POS3loadShootClimbPath3.cmd().withTimeout(2.0))
-            .andThen(new ClimberUp(m_climber))
+            .andThen(new ClimberUp(m_climber).withTimeout(4.0))
         );                                                                                                                
         return routine;
     }

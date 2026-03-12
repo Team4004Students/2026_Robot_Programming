@@ -92,5 +92,6 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     shooterTable.getEntry("Shooter RPS").setDouble(rightShooterMotor.getVelocity().getValueAsDouble());
     // This method will be called once per scheduler run
+    }
   }
-}
+

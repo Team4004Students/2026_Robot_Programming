@@ -61,14 +61,14 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandJoystick driveJoystick = new CommandJoystick(0);
-    private final CommandJoystick steerJoystick = new CommandJoystick(1);
-    private final CommandJoystick daJoystick = new CommandJoystick(2);
+    private final CommandJoystick hid1 = new CommandJoystick(1);
+    private final CommandJoystick hid2 = new CommandJoystick(2);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    public final Intake intake = new Intake(() -> steerJoystick.button(10).getAsBoolean());
+    public final Intake intake = new Intake(() -> hid1.button(4).getAsBoolean());
     public final IntakePosition intakePosition = new IntakePosition();
-    public final Shooter shooter = new Shooter(() -> steerJoystick.button(7).getAsBoolean());
-    public final Indexer indexer = new Indexer(() -> steerJoystick.button(7).getAsBoolean());
+    public final Shooter shooter = new Shooter(() -> hid1.button(6).getAsBoolean());
+    public final Indexer indexer = new Indexer(() -> hid1.button(6).getAsBoolean());
     public final Climber climber = new Climber();
 
     /* Path follower */
@@ -117,17 +117,17 @@ public class RobotContainer {
         indexer.setDefaultCommand(new IndexerStop(indexer));
         intake.setDefaultCommand(new IntakeStop(intake));
 
-        steerJoystick.button(1).whileTrue(new ClimberUp (climber));
-        steerJoystick.button(2).whileTrue(new ClimberDown (climber));
-        daJoystick.button(6).whileTrue(new IntakeRun (intake));
-        daJoystick.button(3).whileTrue(new IntakeDown (intakePosition));
-        daJoystick.button(4).whileTrue(new IntakeUp (intakePosition));
+        hid1.button(7).whileTrue(new ClimberUp (climber));
+        hid1.button(8).whileTrue(new ClimberDown (climber));
+        hid1.button(4).whileTrue(new IntakeRun (intake));
+        hid1.button(3).whileTrue(new IntakeDown (intakePosition));
+        hid1.button(2).whileTrue(new IntakeUp (intakePosition));
 
-        steerJoystick.button(5).whileTrue(new ShooterRun(shooter));
-        steerJoystick.button(5).and(shooter::atSpeed).whileTrue(new IndexerRun(indexer));
+        hid1.button(4).whileTrue(new ShooterRun(shooter));
+        hid1.button(4).and(shooter::atSpeed).whileTrue(new IndexerRun(indexer));
 
-        steerJoystick.button(9).whileTrue(new ShooterRun(shooter));
-        steerJoystick.button(9).and(shooter::atSpeed).and(drivetrain::isPointedAtHub).whileTrue(new IndexerRun(indexer));
+        driveJoystick.button(10).whileTrue(new ShooterRun(shooter));
+        driveJoystick.button(10).and(shooter::atSpeed).and(drivetrain::isPointedAtHub).whileTrue(new IndexerRun(indexer));
 
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
@@ -137,7 +137,7 @@ public class RobotContainer {
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
                     .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
-                    .withRotationalRate(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-steerJoystick.getX(),Steerdeadband),Exponent) * MaxAngularRate, -TurnSpeedLimit, TurnSpeedLimit)) // Drive counterclockwise with negative X (left)
+                    .withRotationalRate(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-hid1.getX(),Steerdeadband),Exponent) * MaxAngularRate, -TurnSpeedLimit, TurnSpeedLimit)) // Drive counterclockwise with negative X (left)
             )
         ); 
 

@@ -24,6 +24,7 @@ public class Intake extends SubsystemBase {
   private TalonFXConfiguration config;
   private TalonFX intakeMotor;
   private BooleanSupplier reverseSwitch;
+  public boolean intakeRunning = false;
 
   /** Creates a new Intake2026. */
   public Intake(BooleanSupplier reverseSwitch) {
@@ -53,12 +54,14 @@ public class Intake extends SubsystemBase {
   }
 
   public void runIntake() {
+    intakeRunning = true;
     double intakeSpeed = 0.75;
     if (reverseSwitch.getAsBoolean()) {intakeSpeed *= -1;}    
     intakeMotor.set(intakeSpeed);
   }
 
   public void stopIntake() {
+    intakeRunning = false;
     intakeMotor.setControl(new VoltageOut(0.0));
   }
 

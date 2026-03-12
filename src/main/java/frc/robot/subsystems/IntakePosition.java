@@ -16,6 +16,7 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.revrobotics.encoder.SplineEncoder;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -24,6 +25,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Second;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 
 
@@ -32,7 +34,9 @@ public class IntakePosition extends SubsystemBase {
   private TalonFX intakePositionMotor;
   private DigitalInput bottomSensor;
   private DigitalInput topSensor;
-  private CANcoder encoder;
+  private final SplineEncoder absEncoder = new SplineEncoder(40);
+  private static final double GEAR_RATIO = 23.0;
+
 
   private NetworkTable intakePosTable = NetworkTableInstance.getDefault().getTable("intake position");
 
@@ -67,18 +71,39 @@ public class IntakePosition extends SubsystemBase {
     bottomSensor = new DigitalInput(0);
     topSensor = new DigitalInput(1);
     
+    seedMotorEncoder();
+
   }
 
+  private void seedMotorEncoder() {
+
+    // MAXSpline returns mechanism rotations (0–1 typically)
+    double mechanismRotations = absEncoder.getPosition();
+
+    // Convert to motor rotations
+    double motorRotations = mechanismRotations * GEAR_RATIO;
+
+    intakePositionMotor.setPosition(motorRotations);
+  }
+
+
   public double getIntakePositionValue() {
-    return intakePositionMotor.getPosition().getValueAsDouble();
+    //return intakePositionMotor.getPosition().getValueAsDouble();
+    double motorRotations = intakePositionMotor.getPosition().getValueAsDouble();
+
+    return motorRotations / GEAR_RATIO;
   }
 
   public void intakeUpPosition() {
-    intakePositionMotor.setControl(new MotionMagicVoltage(75.0));
+    intakePositionMotor.setControl(new MotionMagicVoltage(75.0 * GEAR_RATIO));
   }
 
   public void intakeDownPosition() {
-    intakePositionMotor.setControl(new MotionMagicVoltage(-90.0));
+    intakePositionMotor.setControl(new MotionMagicVoltage(-90.0 * GEAR_RATIO));
+  }
+
+  public void intakeBumpPosition() {
+    intakePositionMotor.setControl(new MotionMagicVoltage(45.0 * GEAR_RATIO));
   }
 
   public void stopIntake() {

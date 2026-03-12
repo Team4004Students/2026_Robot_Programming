@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-        Lights.getAllianceLights();
+        Lights.getAllianceLights(m_robotContainer.shooter, m_robotContainer.intake);
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run(); 
     }
