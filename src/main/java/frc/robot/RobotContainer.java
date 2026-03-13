@@ -65,10 +65,10 @@ public class RobotContainer {
     private final CommandJoystick hid2 = new CommandJoystick(2);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    public final Intake intake = new Intake(() -> hid1.button(4).getAsBoolean());
+    public final Intake intake = new Intake(() -> hid1.button(1).getAsBoolean());
     public final IntakePosition intakePosition = new IntakePosition();
-    public final Shooter shooter = new Shooter(() -> hid1.button(6).getAsBoolean());
-    public final Indexer indexer = new Indexer(() -> hid1.button(6).getAsBoolean());
+    public final Shooter shooter = new Shooter(() -> hid1.button(5).getAsBoolean());
+    public final Indexer indexer = new Indexer(() -> hid1.button(5).getAsBoolean());
     public final Climber climber = new Climber();
 
     /* Path follower */
@@ -123,8 +123,8 @@ public class RobotContainer {
         hid1.button(3).whileTrue(new IntakeDown (intakePosition));
         hid1.button(2).whileTrue(new IntakeUp (intakePosition));
 
-        hid1.button(4).whileTrue(new ShooterRun(shooter));
-        hid1.button(4).and(shooter::atSpeed).whileTrue(new IndexerRun(indexer));
+        hid1.button(6).whileTrue(new ShooterRun(shooter));
+        hid1.button(6).and(shooter::atSpeed).whileTrue(new IndexerRun(indexer));
 
         driveJoystick.button(10).whileTrue(new ShooterRun(shooter));
         driveJoystick.button(10).and(shooter::atSpeed).and(drivetrain::isPointedAtHub).whileTrue(new IndexerRun(indexer));
