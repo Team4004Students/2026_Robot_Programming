@@ -95,15 +95,15 @@ public class IntakePosition extends SubsystemBase {
   }
 
   public void intakeUpPosition() {
-    intakePositionMotor.setControl(new MotionMagicVoltage(0.42 * GEAR_RATIO));
+    intakePositionMotor.setControl(new MotionMagicVoltage(-0.35 * GEAR_RATIO));
   }
 
   public void intakeDownPosition() {
-    intakePositionMotor.setControl(new MotionMagicVoltage(-0.02696 * GEAR_RATIO));
+    intakePositionMotor.setControl(new MotionMagicVoltage(-0.79 * GEAR_RATIO));
   }
 
   public void intakeBumpPosition() {
-    intakePositionMotor.setControl(new MotionMagicVoltage(0.1703 * GEAR_RATIO));
+    intakePositionMotor.setControl(new MotionMagicVoltage(-0.50 * GEAR_RATIO));
   }
 
   public void stopIntake() {
