@@ -31,6 +31,7 @@ import frc.robot.commands.IntakeRun;
 import frc.robot.commands.IntakeStop;
 import frc.robot.commands.ShooterRun;
 import frc.robot.commands.ShooterStop;
+import frc.robot.commands.IntakeBumpPosition;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -40,6 +41,8 @@ import frc.robot.subsystems.IntakePosition;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.IndexerRun;
 import frc.robot.commands.IndexerStop;
+import frc.robot.commands.IntakeBumpPosition;
+
 import java.util.function.BooleanSupplier;
 
 public class RobotContainer {
@@ -125,6 +128,7 @@ public class RobotContainer {
 
         hid1.button(6).whileTrue(new ShooterRun(shooter));
         hid1.button(6).and(shooter::atSpeed).whileTrue(new IndexerRun(indexer));
+        driveJoystick.button(9).whileTrue(new IntakeBumpPosition(intakePosition));
 
         driveJoystick.button(10).whileTrue(new ShooterRun(shooter));
         driveJoystick.button(10).and(shooter::atSpeed).and(drivetrain::isPointedAtHub).whileTrue(new IndexerRun(indexer));
@@ -154,6 +158,10 @@ public class RobotContainer {
                     .withRotationalRate(drivetrain.bumpAssist() * MaxAngularRate)) // Drive counterclockwise with negative X (left)
             )
         );
+
+       /*if driveJoystick.button(9) {
+            (new IntakeBumpPosition(intakePosition));
+        } else {}*/
 
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
