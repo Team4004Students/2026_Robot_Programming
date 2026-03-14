@@ -55,8 +55,8 @@ public class Intake extends SubsystemBase {
     intakeMotor.getConfigurator().apply(config);
     
     MotorOutputConfigs motorOutput = config.MotorOutput;
-    motorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-    
+    motorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    intakeMotor.getConfigurator().apply(config);
   }
 
   public void runIntake() {
