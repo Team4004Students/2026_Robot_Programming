@@ -24,7 +24,7 @@ public class Climber extends SubsystemBase {
   private DigitalInput upperLimitSensor;
   private DigitalInput lowerLimitSensor;
   private SparkMax climberMotor;
-  private double climberSpeed = 0.8;
+  private double climberSpeed = 0.95;
   //private SparkAbsoluteEncoder climberEncoder;
   //private SparkClosedLoopController pidController;
   
