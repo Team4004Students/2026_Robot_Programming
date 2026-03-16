@@ -41,8 +41,6 @@ import frc.robot.subsystems.IntakePosition;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.IndexerRun;
 import frc.robot.commands.IndexerStop;
-import frc.robot.commands.IntakeBumpPosition;
-
 import java.util.function.BooleanSupplier;
 
 public class RobotContainer {
