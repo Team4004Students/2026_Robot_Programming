@@ -33,6 +33,8 @@ import static edu.wpi.first.units.Units.Second;
 
 
 public class IntakePosition extends SubsystemBase {
+  public boolean ignoreUpDown = false;
+
   private TalonFXConfiguration config;
   private DetachedEncoderConfig absEncoderConfig;
   private TalonFX intakePositionMotor;
@@ -111,14 +113,19 @@ public class IntakePosition extends SubsystemBase {
   }
 
   public void intakeUpPosition() {
-    intakePositionMotor.setControl(new MotionMagicVoltage(0.2062 * GEAR_RATIO));
+    if (!ignoreUpDown) {
+      intakePositionMotor.setControl(new MotionMagicVoltage(0.2062 * GEAR_RATIO));
+    }
   }
 
   public void intakeDownPosition() {
-    intakePositionMotor.setControl(new MotionMagicVoltage(0.5053 * GEAR_RATIO));
+    if (!ignoreUpDown) {
+      intakePositionMotor.setControl(new MotionMagicVoltage(0.5053 * GEAR_RATIO));
+    }
   }
 
   public void intakeBumpPosition() {
+    ignoreUpDown = true;
     intakePositionMotor.setControl(new MotionMagicVoltage(0.4313 * GEAR_RATIO));
   }
 
