@@ -41,8 +41,6 @@ import frc.robot.subsystems.IntakePosition;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.IndexerRun;
 import frc.robot.commands.IndexerStop;
-import frc.robot.commands.IntakeBumpPosition;
-
 import java.util.function.BooleanSupplier;
 
 public class RobotContainer {
@@ -139,22 +137,22 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
-                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
+                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
+                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
                     .withRotationalRate(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-hid1.getX(),Steerdeadband),Exponent) * MaxAngularRate, -TurnSpeedLimit, TurnSpeedLimit)) // Drive counterclockwise with negative X (left)
             )
         ); 
 
         driveJoystick.button(10).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
-                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
-                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
+                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
+                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
                     .withRotationalRate(drivetrain.pointAtHub() * MaxAngularRate)) // Drive counterclockwise with negative X (left)
             )
         );
 
         driveJoystick.button(9).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
-                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
-                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
+                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
+                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
                     .withRotationalRate(drivetrain.bumpAssist() * MaxAngularRate)) // Drive counterclockwise with negative X (left)
             )
         );
