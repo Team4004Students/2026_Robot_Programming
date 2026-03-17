@@ -421,8 +421,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
 
-
-
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
         boolean hasTarget = limelight.getEntry("tv").getDouble(0) == 1;
 
@@ -432,8 +430,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             int tagID = (int) limelight.getEntry("tid").getDouble(-1);
 
             // Robot pose (x, y, z, roll, pitch, yaw) in meters/degrees
+            String whichAlliance = "botpose_wpiblue";
+            Optional<Alliance> ally = DriverStation.getAlliance();
+            if (ally.isPresent()) {
+                if (ally.get()==Alliance.Red) {
+                    whichAlliance = "botpose_wpired";
+                }
+            }
             double[] botPose = limelight
-                .getEntry("botpose_wpiblue")
+                .getEntry(whichAlliance)
                 .getDoubleArray(new double[6]);
 
             Pose2d visionPose = new Pose2d(botPose[0], botPose[1], new Rotation2d(Math.toRadians(botPose[5])));
