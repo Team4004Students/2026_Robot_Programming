@@ -4,9 +4,17 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.ClimberUp;
@@ -17,8 +25,10 @@ import frc.robot.commands.IntakeUp;
 import frc.robot.commands.IntakeRun;
 import frc.robot.commands.ShooterRun;
 import frc.robot.commands.ShooterStop;
+import frc.robot.generated.TunerConstants;
 import frc.robot.commands.IntakeStop;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.IntakePosition;
@@ -27,14 +37,16 @@ import frc.robot.subsystems.Shooter;
 public class AutoRoutines {
   /** Creates a new AutoRoutines. */
     private final AutoFactory m_factory;
+    private final CommandSwerveDrivetrain m_drivetrain;
     private final Climber m_climber;
     private final Intake m_intake;
     private final Shooter m_shooter;
     private final Indexer m_indexer;
     private final IntakePosition m_intakepos;
 
-    public AutoRoutines(AutoFactory factory, Climber climber, Intake intake, Shooter shooter, Indexer indexer, IntakePosition intakepos) {
+    public AutoRoutines(AutoFactory factory, CommandSwerveDrivetrain drivetrain, Climber climber, Intake intake, Shooter shooter, Indexer indexer, IntakePosition intakepos) {
         m_factory = factory;
+        m_drivetrain = drivetrain;
         m_climber = climber;
         m_intake = intake;
         m_shooter = shooter;
@@ -49,6 +61,37 @@ public class AutoRoutines {
         routine.active().onTrue(
             simplePath.resetOdometry()
             .andThen(simplePath.cmd())
+        );
+        return routine;
+    }
+
+    public AutoRoutine muskegonBackShoot() {
+        final double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+        final double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+
+        final AutoRoutine routine = m_factory.newRoutine("MUSKEGON BACK UP AND SHOOT Auto");
+        final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+
+        routine.active().onTrue(
+            m_drivetrain.runOnce(() -> m_drivetrain.seedFieldCentric(Rotation2d.kZero))
+            // Then slowly drive forward (away from us) for 5 seconds.
+            .andThen(m_drivetrain.applyRequest(() ->
+                drive.withVelocityX(-0.5)
+                    .withVelocityY(0)
+                    .withRotationalRate(0)
+            ).withTimeout(5.0))
+            // Finally idle for the rest of auton
+            .andThen(m_drivetrain.applyRequest(() -> new SwerveRequest.Idle()))
+            .andThen(new IntakeDown(m_intakepos))
+            .andThen(new ShooterRun(m_shooter))
+            .andThen(new WaitUntilCommand(m_shooter::atSpeed))
+            .andThen(new IndexerRun(m_indexer))
+            .andThen(new WaitCommand(5.0))
+            .andThen(new IndexerStop(m_indexer))
+            .andThen(new ShooterStop(m_shooter))
+            .andThen(new IntakeUp(m_intakepos))
         );
         return routine;
     }
