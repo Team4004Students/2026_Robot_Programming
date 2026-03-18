@@ -42,8 +42,8 @@ public class Shooter extends SubsystemBase {
 
      /** MotionMagic Configs */
     MotionMagicConfigs motionMagic = config.MotionMagic;
-    motionMagic.withMotionMagicCruiseVelocity(RotationsPerSecond.of(5)) // Reach 5 (mechanism) rotations per second cruise.
-               .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(10)) // Take approximately 0.5 seconds to reach max velocity.
+    motionMagic.withMotionMagicCruiseVelocity(RotationsPerSecond.of(40)) // Reach 5 (mechanism) rotations per second cruise.
+               .withMotionMagicAcceleration(RotationsPerSecondPerSecond.of(20)) // Take approximately 0.5 seconds to reach max velocity.
                .withMotionMagicJerk(RotationsPerSecondPerSecond.per(Second).of(100)); // Take approximately 0.1 seconds to reach max acceleration.
 
     MotorOutputConfigs motorOutput = config.MotorOutput;
@@ -51,12 +51,12 @@ public class Shooter extends SubsystemBase {
                
     /** PID Configs */
     Slot0Configs slot0 = config.Slot0;
-    slot0.kS = 0.25; // Add 0.25 V output to overcome static friction.
-    slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output.
-    slot0.kA = 0.01; // An acceleration of 1 rps/s requries 0.01 V output.
-    slot0.kP = 60.0; // A position error of 0.2 rotations results in 12 V output.
+    //slot0.kS = 0.25; // Add 0.25 V output to overcome static friction.
+    slot0.kV = 0.50; // A velocity target of 1 rps results in 0.12 V output.
+    //slot0.kA = 0.01; // An acceleration of 1 rps/s requries 0.01 V output.
+    slot0.kP = 0.55; // A position error of 0.2 rotations results in 12 V output.
     slot0.kI = 0.0; // No ouptut for integrated error.
-    slot0.kD = 0.5; // A velocity error of 1 rps results in 0.5 V output.
+    slot0.kD = 0.0; // A velocity error of 1 rps results in 0.5 V output.
 
     config.MotionMagic = motionMagic;
     config.MotorOutput = motorOutput;
@@ -67,10 +67,10 @@ public class Shooter extends SubsystemBase {
   }
 
   public void runShooter() {
-    //rightShooterMotor.setControl(new MotionMagicVelocityVoltage(8));
-    double shooterSpeed = 0.75;
+    //rightShooterMotor.set(shooterSpeed);
+    double shooterSpeed = 48.0;
     if (reverseSwitch.getAsBoolean()) {shooterSpeed *= -1;}
-    rightShooterMotor.set(shooterSpeed);
+    rightShooterMotor.setControl(new MotionMagicVelocityVoltage(shooterSpeed));
     leftShooterMotor.setControl(new Follower(30, MotorAlignmentValue.Opposed));
   }
 

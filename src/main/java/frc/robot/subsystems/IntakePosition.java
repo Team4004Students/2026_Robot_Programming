@@ -66,10 +66,10 @@ public class IntakePosition extends SubsystemBase {
 
     /** PID Configs */
     Slot0Configs slot0 = config.Slot0;
-    slot0.kS = 0.25; // Add 0.25 V output to overcome static friction.
-    slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output.
-    slot0.kA = 0.01; // An acceleration of 1 rps/s requries 0.01 V output.
-    slot0.kP = 120.0; // A position error of 0.2 rotations results in 12 V output. (60::FOR LUTHER TO REMEMBER)
+    //slot0.kS = 0.25; // Add 0.25 V output to overcome static friction.
+    //slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output.
+    //slot0.kA = 0.01; // An acceleration of 1 rps/s requries 0.01 V output.
+    slot0.kP = 7.0; // A position error of 0.2 rotations results in 12 V output. (60::FOR LUTHER TO REMEMBER)
     slot0.kI = 0.0; // No ouptut for integrated error.
     slot0.kD = 0.1; // A velocity error of 1 rps results in 0.5 V output.
 
@@ -113,15 +113,20 @@ public class IntakePosition extends SubsystemBase {
   }
 
   public void intakeUpPosition() {
-    intakePositionMotor.setControl(new MotionMagicVoltage(0.42 * GEAR_RATIO));
+    if (!ignoreUpDown) {
+      intakePositionMotor.setControl(new MotionMagicVoltage(0.2062 * GEAR_RATIO));
+    }
   }
 
   public void intakeDownPosition() {
-    intakePositionMotor.setControl(new MotionMagicVoltage(-0.02696 * GEAR_RATIO));
+    if (!ignoreUpDown) {
+      intakePositionMotor.setControl(new MotionMagicVoltage(0.5053 * GEAR_RATIO));
+    }
   }
 
   public void intakeBumpPosition() {
-    intakePositionMotor.setControl(new MotionMagicVoltage(0.1703 * GEAR_RATIO));
+    ignoreUpDown = true;
+    intakePositionMotor.setControl(new MotionMagicVoltage(0.4313 * GEAR_RATIO));
   }
 
   public void stopIntake() {

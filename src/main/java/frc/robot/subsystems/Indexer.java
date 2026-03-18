@@ -31,7 +31,7 @@ public class Indexer extends SubsystemBase {
   }
 
   public void runIndexer() {
-    double indexerSpeed = 0.5;
+    double indexerSpeed = 0.9;
     double rollerSpeed = 0.5;
     if (reverseSwitch.getAsBoolean()) {indexerSpeed *= -1; rollerSpeed *= -1;}
     indexerMotor.set(indexerSpeed);

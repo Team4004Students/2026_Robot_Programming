@@ -434,7 +434,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             Optional<Alliance> ally = DriverStation.getAlliance();
             if (ally.isPresent()) {
                 if (ally.get()==Alliance.Red) {
-                    whichAlliance = "botpose_wpired";
+                    whichAlliance = "botpose_wpiblue";
                 }
             }
             double[] botPose = limelight

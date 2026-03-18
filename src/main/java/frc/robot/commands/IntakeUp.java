@@ -15,6 +15,7 @@ public class IntakeUp extends Command {
   public IntakeUp(IntakePosition copyIntakePosition) {
     intakePosition = copyIntakePosition;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(intakePosition);
   }
 
   // Called when the command is initially scheduled.
