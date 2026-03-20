@@ -55,7 +55,17 @@ public class TunerConstants {
 
     // Initial configs for the drive and steer motors and the azimuth encoder; these cannot be null.
     // Some configs will be overwritten; check the `with*InitialConfigs()` API documentation.
-    private static final TalonFXConfiguration driveInitialConfigs = new TalonFXConfiguration();
+    private static final TalonFXConfiguration driveInitialConfigs = new TalonFXConfiguration()
+        .withCurrentLimits(
+            new CurrentLimitsConfigs()
+                // stator current limit to help avoid brownouts without impacting performance.
+                .withSupplyCurrentLimit(Amps.of(40.0)) // amps
+                .withSupplyCurrentLimitEnable(true)
+                //.withSupplyCurrentThreshold(Amps.of(60.0)) // trigger threshold
+                //.withSupplyTimeThreshold(0.5) // seconds before limiting
+                .withStatorCurrentLimit(Amps.of(80))
+                .withStatorCurrentLimitEnable(true)
+        );
     private static final TalonFXConfiguration steerInitialConfigs = new TalonFXConfiguration()
         .withCurrentLimits(
             new CurrentLimitsConfigs()

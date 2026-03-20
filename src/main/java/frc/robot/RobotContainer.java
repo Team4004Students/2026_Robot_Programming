@@ -95,7 +95,7 @@ public class RobotContainer {
         autoChooser.addRoutine("POS1PickShootClimb Auto", autoRoutines::POS1PickShootClimb);
 
         //POS2 AUTOS
-        autoChooser.addRoutine("POS2BackShootClimb Auto", autoRoutines::POS2BackShootClimb);
+        autoChooser.addRoutine("BackShoot Auto", autoRoutines::POS2BackShootClimb);
 
         //POS3 AUTOS
         autoChooser.addRoutine("POS3LoadShoot Auto", autoRoutines::POS3loadShoot);
@@ -109,7 +109,10 @@ public class RobotContainer {
         autoChooser.addRoutine("Screw You Auto", autoRoutines::ScrewYou);
         autoChooser.addRoutine("Paul Auto", autoRoutines::Paul);
 
-        autoChooser.addRoutine("MUSKEGON BACK UP AND SHOOT", autoRoutines::muskegonBackShoot);
+        //DO NOTHING AUTO
+        autoChooser.addRoutine("Do Nothing", autoRoutines::doNothingAuto);
+
+        // autoChooser.addRoutine("MUSKEGON BACK UP AND SHOOT", autoRoutines::muskegonBackShoot);
 
         //AUTO CHOSER
         SmartDashboard.putData("Auto Chooser", autoChooser);

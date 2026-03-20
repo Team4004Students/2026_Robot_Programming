@@ -28,6 +28,13 @@ public class Robot extends TimedRobot {
 
     public Robot() {
         m_robotContainer = new RobotContainer();
+
+        AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
+        
+        for(int i = 0; i<=32; i++){
+            Optional<Pose3d> tagPose = fieldLayout.getTagPose(i);
+            System.out.println("tagPose " + i + ": " + tagPose);
+        }
     }
 
     @Override
@@ -65,13 +72,6 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().cancel(m_autonomousCommand);
-        }
-       
-        AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
-        
-        for(int i = 0; i<=32; i++){
-            Optional<Pose3d> tagPose = fieldLayout.getTagPose(i);
-            System.out.println("tagPose " + i + ": " + tagPose);
         }
     }
 

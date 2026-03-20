@@ -54,6 +54,15 @@ public class AutoRoutines {
         m_intakepos = intakepos;
     }
 
+    public AutoRoutine doNothingAuto() {
+        final AutoRoutine routine = m_factory.newRoutine("Do Nothing Auto");
+
+        routine.active().onTrue(
+            new WaitCommand(5)
+        );
+        return routine;
+    }
+
     public AutoRoutine simplePathAuto() {
         final AutoRoutine routine = m_factory.newRoutine("SimplePath Auto");
         final AutoTrajectory simplePath = routine.trajectory("SimplePath");
