@@ -47,7 +47,7 @@ public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
     private final double SpeedLimit = 0.75 * MaxSpeed;
-    private final double TurnSpeedLimit = 0.75 * MaxSpeed;
+    private final double TurnSpeedLimit = 1.25 * MaxSpeed;
     private final double turtleMode = 0.25 * MaxSpeed;
     private final double turtleModeTurn = 0.25 * MaxSpeed;
     private final double turboMode = 1.5 * MaxSpeed;
@@ -151,14 +151,14 @@ public class RobotContainer {
             )
         ); 
 
-        driveJoystick.button(2).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
+        driveJoystick.button(1).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
                 drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -turtleMode, turtleMode)) // Drive forward with negative Y (forward)
                     .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -turtleMode, turtleMode)) // Drive left with negative X (left)
                     .withRotationalRate(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-hid1.getX(),Steerdeadband),Exponent) * MaxAngularRate, -turtleModeTurn, turtleModeTurn))) // Drive counterclockwise with negative X (left)
             )
         );
 
-        driveJoystick.button(1).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
+        driveJoystick.button(2).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
                 drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -turboMode, turboMode)) // Drive forward with negative Y (forward)
                     .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -turboMode, turboMode)) // Drive left with negative X (left)
                     .withRotationalRate(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-hid1.getX() * 2.85,Steerdeadband),Exponent) * MaxAngularRate, -turboModeTurn, turboModeTurn))) // Drive counterclockwise with negative X (left)
