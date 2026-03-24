@@ -158,8 +158,8 @@ public class AutoRoutines {
             .andThen(new IndexerStop(m_indexer))
             .andThen(new ShooterStop(m_shooter))
             .andThen(new IntakeUp(m_intakepos))
-            .andThen(POS2BackShootClimbPath2.cmd().withTimeout(1.5))
-            .andThen(new ClimberUp(m_climber).withTimeout(4.0))
+            //.andThen(POS2BackShootClimbPath2.cmd().withTimeout(1.5))
+           // .andThen(new ClimberUp(m_climber).withTimeout(4.0))
         );                                                                                                                
         return routine;
     }

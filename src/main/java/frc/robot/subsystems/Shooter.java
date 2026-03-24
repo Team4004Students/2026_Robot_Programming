@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
 
   public void runShooter() {
     //rightShooterMotor.set(shooterSpeed);
-    double shooterSpeed = 48.0;
+    double shooterSpeed = 46.0;
     if (reverseSwitch.getAsBoolean()) {shooterSpeed *= -1;}
     rightShooterMotor.setControl(new MotionMagicVelocityVoltage(shooterSpeed));
     leftShooterMotor.setControl(new Follower(30, MotorAlignmentValue.Opposed));
