@@ -365,9 +365,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         targetSpeeds.vxMetersPerSecond += m_pathXController.calculate(
             pose.getX(), sample.x
         );
+        targetSpeeds.vxMetersPerSecond *= -1;
+        
         targetSpeeds.vyMetersPerSecond += m_pathYController.calculate(
             pose.getY(), sample.y
         );
+        targetSpeeds.vyMetersPerSecond *= -1;
+
         targetSpeeds.omegaRadiansPerSecond += m_pathThetaController.calculate(
             pose.getRotation().getRadians(), sample.heading
         );

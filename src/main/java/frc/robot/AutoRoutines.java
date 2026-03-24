@@ -300,4 +300,44 @@ public class AutoRoutines {
         );
         return routine;
     }
+    
+    public AutoRoutine POS6TrenchShootAuto() {
+        final AutoRoutine routine = m_factory.newRoutine("POS6TrenchShoot Auto");
+        final AutoTrajectory POS6TrenchShootPath = routine.trajectory("POS6TrenchShoot");
+
+        routine.active().onTrue(
+            POS6TrenchShootPath.resetOdometry()
+            .andThen(new IntakeDown(m_intakepos))
+            .andThen(new IntakeRun(m_intake))
+            .andThen(POS6TrenchShootPath.cmd())
+            .andThen(new ShooterRun(m_shooter))
+            .andThen(new WaitUntilCommand(m_shooter::atSpeed))
+            .andThen(new IndexerRun(m_indexer))
+            .andThen(new WaitCommand(5))
+            .andThen(new IndexerStop(m_indexer))
+            .andThen(new ShooterStop(m_shooter))
+           
+        );                                                                                                                
+        return routine;
+    }
+    
+    public AutoRoutine POS7TrenchShootAuto() {
+        final AutoRoutine routine = m_factory.newRoutine("POS7TrenchShoot Auto");
+        final AutoTrajectory POS7TrenchShootPath = routine.trajectory("POS7TrenchShoot");
+
+        routine.active().onTrue(
+            POS7TrenchShootPath.resetOdometry()
+            .andThen(new IntakeDown(m_intakepos))
+            .andThen(new IntakeRun(m_intake))
+            .andThen(POS7TrenchShootPath.cmd())
+            .andThen(new ShooterRun(m_shooter))
+            .andThen(new WaitUntilCommand(m_shooter::atSpeed))
+            .andThen(new IndexerRun(m_indexer))
+            .andThen(new WaitCommand(5))
+            .andThen(new IndexerStop(m_indexer))
+            .andThen(new ShooterStop(m_shooter))
+            
+        );                                                                                                                
+        return routine;
+    }
 }
