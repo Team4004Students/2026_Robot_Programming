@@ -17,6 +17,8 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTable;
@@ -61,6 +63,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final PIDController m_pathXController = new PIDController(10, 0, 0);
     private final PIDController m_pathYController = new PIDController(10, 0, 0);
     private final PIDController m_pathThetaController = new PIDController(7, 0, 0);
+    private final Transform2d cameraToRobot = new Transform2d(new Translation2d(0.1524, -0.3302), new Rotation2d());
 
     /* Swerve requests to apply during SysId characterization */
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
@@ -235,6 +238,51 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public boolean isPointedAtHub() {
         return pointedAtHub;
     }
+
+    public double distanceFromHub() {
+        double blueHubX = 4.61;
+        double blueHubY = 4.02;
+        double redHubX = 11.91;
+        double redHubY = 4.02;
+        double robotX;
+        double robotY;
+        double hubX;
+        double hubY;
+        double errorX;
+        double errorY;
+
+        //Select hub based on Alliance color
+        hubX = blueHubX;
+        hubY = blueHubY;
+        Optional<Alliance> ally = DriverStation.getAlliance();
+        if (ally.isPresent()) {
+            if (ally.get()==Alliance.Red){
+              hubX = redHubX;
+              hubY = redHubY;
+            }
+        }
+
+        //Getting pose estemator from commandSwerveDriveTrain to get our X, Y, and Heading
+        robotX = this.getState().Pose.getX();
+        robotY = this.getState().Pose.getY();
+    
+
+        swerveTable.getEntry("Hub X").setDouble(hubX);
+        swerveTable.getEntry("Hub Y").setDouble(hubY);
+        
+        //Calculate our X, Y, and Heading error
+        errorX = hubX - robotX;
+        errorY = hubY - robotY;
+     
+        //Calculate rotational rate
+
+        double distance = Math.sqrt(errorX * errorX + errorY * errorY);
+
+        return distance;
+       
+    }
+
+    
     
     public double bumpAssist() {
 
@@ -424,7 +472,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
         boolean hasTarget = limelight.getEntry("tv").getDouble(0) == 1;
 
-        if (hasTarget && !DriverStation.isAutonomous()) {
+        if (hasTarget) {
         
             // AprilTag ID
             int tagID = (int) limelight.getEntry("tid").getDouble(-1);
@@ -442,7 +490,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .getDoubleArray(new double[6]);
 
             Pose2d visionPose = new Pose2d(botPose[0], botPose[1], new Rotation2d(Math.toRadians(botPose[5])));
-            this.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
+            Pose2d robotPose = visionPose.transformBy(cameraToRobot);
+            this.addVisionMeasurement(robotPose, Timer.getFPGATimestamp());
         } else {
             //System.out.println("No AprilTag detected");
         }
@@ -450,7 +499,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         swerveTable.getEntry("Robot X").setDouble(this.getState().Pose.getX());
         swerveTable.getEntry("Robot Y").setDouble(this.getState().Pose.getY());
         swerveTable.getEntry("Robot Yaw").setDouble(this.getState().Pose.getRotation().getDegrees());
-
+        swerveTable.getEntry("Robot Distance From Hub").setDouble(this.distanceFromHub());
     }
 
     private void startSimThread() {
