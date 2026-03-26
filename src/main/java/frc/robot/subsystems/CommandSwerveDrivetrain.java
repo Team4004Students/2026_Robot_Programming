@@ -47,6 +47,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private double m_lastSimTime;
 
     private boolean pointedAtHub = false;
+    public static double hubDistance = 1.0;
     
     private NetworkTable limelight;
     private NetworkTable swerveTable = NetworkTableInstance.getDefault().getTable("swerve");
@@ -239,7 +240,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return pointedAtHub;
     }
 
-    public double distanceFromHub() {
+    public void distanceFromHub() {
         double blueHubX = 4.61;
         double blueHubY = 4.02;
         double redHubX = 11.91;
@@ -278,8 +279,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         double distance = Math.sqrt(errorX * errorX + errorY * errorY);
 
-        return distance;
-       
+        hubDistance = distance;
     }
 
     
@@ -500,10 +500,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             //System.out.println("No AprilTag detected");
         }
 
+        this.distanceFromHub();
+
         swerveTable.getEntry("Robot X").setDouble(this.getState().Pose.getX());
         swerveTable.getEntry("Robot Y").setDouble(this.getState().Pose.getY());
         swerveTable.getEntry("Robot Yaw").setDouble(this.getState().Pose.getRotation().getDegrees());
-        swerveTable.getEntry("Robot Distance From Hub").setDouble(this.distanceFromHub());
+        swerveTable.getEntry("Robot Distance From Hub").setDouble(hubDistance);
     }
 
     private void startSimThread() {
