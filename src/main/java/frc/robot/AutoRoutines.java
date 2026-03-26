@@ -400,4 +400,18 @@ public class AutoRoutines {
         );                                                                                                                
         return routine;
     }
+    public AutoRoutine ScrewYouTrench() {
+        final AutoRoutine routine = m_factory.newRoutine("ScrewYouTrench Auto");
+        final AutoTrajectory ScrewYouTrenchPath1 = routine.trajectory("ScrewYouTrench1");
+        final AutoTrajectory ScrewYouTrenchPath2 = routine.trajectory("ScrewYouTrench2");
+
+        routine.active().onTrue(
+            ScrewYouTrenchPath1.resetOdometry()
+            .andThen(new IntakeDown(m_intakepos))
+            .andThen(ScrewYouTrenchPath1.cmd())
+            .andThen(new IntakeRun(m_intake))
+            .andThen(ScrewYouTrenchPath2.cmd())
+        );                                                                                                                
+        return routine;
+    }
 }
