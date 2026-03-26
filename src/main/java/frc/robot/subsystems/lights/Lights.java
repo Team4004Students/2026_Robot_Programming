@@ -59,19 +59,23 @@ public class Lights extends SubsystemBase {
 
   public static void getAllianceLights(Shooter shooter, Intake intake) {
     Optional<Alliance> ally = DriverStation.getAlliance();
-    if (ally.isPresent()){
+    if (ally.isPresent()) {
       if (ally.get()==Alliance.Red){
         if (shooter.atSpeed()) {
           turnRedAniShooter();
+          turnRedAniIntake();
         } else {
           turnRedShooter();
+          turnRedIntake();
         }
 
+        /*
         if (intake.intakeRunning) {
           turnRedAniIntake();
         } else {
           turnRedIntake();
         }
+        */
 
         if (DriverStation.isAutonomous()) {
           turnMarsBack();
@@ -79,26 +83,29 @@ public class Lights extends SubsystemBase {
           turnRedBack();
         }
       }
-      if (ally.get()==Alliance.Blue){
-        
+
+      if (ally.get()==Alliance.Blue) {
         if (shooter.atSpeed()) {
           turnBlueAniShooter();
+          turnBlueAniIntake();
         } else {
           turnBlueShooter();
+          turnBlueIntake();
         }
 
+        /*
         if (intake.intakeRunning) {
           turnBlueAniIntake();
         } else {
           turnBlueIntake();
         }
+        */
         
         if (DriverStation.isAutonomous()) {
           turnMarsBack();
         } else {
           turnBlueForOrangeBack();
         }
-        
       }
     } else {
       turnOffIntake();
@@ -106,8 +113,6 @@ public class Lights extends SubsystemBase {
       turnOffBack();
     }
   }
-
-
 
   public Lights() {}
 

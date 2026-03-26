@@ -91,23 +91,29 @@ public class RobotContainer {
         //autoChooser.addRoutine("SimpleMultiPath", autoRoutines::simpleMultiPathAuto);
 
         //POS1 AUTOS
-        autoChooser.addRoutine("POS1PickShoot Auto", autoRoutines::POS1PickShoot);
-        autoChooser.addRoutine("POS1PickShootClimb Auto", autoRoutines::POS1PickShootClimb);
+        //autoChooser.addRoutine("POS1PickShoot Auto", autoRoutines::POS1PickShoot);
+        //autoChooser.addRoutine("POS1PickShootClimb Auto", autoRoutines::POS1PickShootClimb);
 
         //POS2 AUTOS
         autoChooser.addRoutine("BackShoot Auto", autoRoutines::POS2BackShootClimb);
 
         //POS3 AUTOS
-        autoChooser.addRoutine("POS3LoadShoot Auto", autoRoutines::POS3loadShoot);
-        autoChooser.addRoutine("POS3LoadShootClimb Auto", autoRoutines::POS3loadShootClimb);
+        //autoChooser.addRoutine("POS3LoadShoot Auto", autoRoutines::POS3loadShoot);
+        //autoChooser.addRoutine("POS3LoadShootClimb Auto", autoRoutines::POS3loadShootClimb);
 
         //POS4 AUTOS
-        autoChooser.addRoutine("POS4Bump Auto", autoRoutines::POS4Bump);
+        //autoChooser.addRoutine("POS4Bump Auto", autoRoutines::POS4Bump);
         
         //POS5 AUTOS
-        autoChooser.addRoutine("POS5Bump Auto", autoRoutines::POS5Bump);
+        //autoChooser.addRoutine("POS5Bump Auto", autoRoutines::POS5Bump);
         autoChooser.addRoutine("Screw You Auto", autoRoutines::ScrewYou);
         autoChooser.addRoutine("Paul Auto", autoRoutines::Paul);
+
+        //TRENCH AUTOS
+        autoChooser.addRoutine("Left Trench Shoot 1X Auto", autoRoutines::POS7TrenchShootAuto);
+        autoChooser.addRoutine("Left Trench Shoot 2X Auto", autoRoutines::POS7TrenchShootx2Auto);
+        autoChooser.addRoutine("Right Trench Shoot 1X Auto", autoRoutines::POS6TrenchShootAuto);
+        autoChooser.addRoutine("Right Trench Shoot 2X Auto", autoRoutines::POS6TrenchShootx2Auto);
 
         //DO NOTHING AUTO
         autoChooser.addRoutine("Do Nothing", autoRoutines::doNothingAuto);
