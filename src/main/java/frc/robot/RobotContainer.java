@@ -47,11 +47,11 @@ public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
     private final double SpeedLimit = 0.75 * MaxSpeed;
-    private final double TurnSpeedLimit = 1.25 * MaxSpeed;
+    private final double TurnSpeedLimit = 1.50 * MaxSpeed;
     private final double turtleMode = 0.25 * MaxSpeed;
     private final double turtleModeTurn = 0.25 * MaxSpeed;
     private final double turboMode = 1.5 * MaxSpeed;
-    private final double turboModeTurn = 1.5 * MaxSpeed;
+    private final double turboModeTurn = 1.75 * MaxSpeed;
     private final double Deadband = 0.1;
     private final double Steerdeadband = 0.05;
     private final double Exponent = 1.0;
@@ -91,23 +91,29 @@ public class RobotContainer {
         //autoChooser.addRoutine("SimpleMultiPath", autoRoutines::simpleMultiPathAuto);
 
         //POS1 AUTOS
-        autoChooser.addRoutine("POS1PickShoot Auto", autoRoutines::POS1PickShoot);
-        autoChooser.addRoutine("POS1PickShootClimb Auto", autoRoutines::POS1PickShootClimb);
+        //autoChooser.addRoutine("POS1PickShoot Auto", autoRoutines::POS1PickShoot);
+        //autoChooser.addRoutine("POS1PickShootClimb Auto", autoRoutines::POS1PickShootClimb);
 
         //POS2 AUTOS
         autoChooser.addRoutine("BackShoot Auto", autoRoutines::POS2BackShootClimb);
 
         //POS3 AUTOS
-        autoChooser.addRoutine("POS3LoadShoot Auto", autoRoutines::POS3loadShoot);
-        autoChooser.addRoutine("POS3LoadShootClimb Auto", autoRoutines::POS3loadShootClimb);
+        //autoChooser.addRoutine("POS3LoadShoot Auto", autoRoutines::POS3loadShoot);
+        //autoChooser.addRoutine("POS3LoadShootClimb Auto", autoRoutines::POS3loadShootClimb);
 
         //POS4 AUTOS
-        autoChooser.addRoutine("POS4Bump Auto", autoRoutines::POS4Bump);
+        //autoChooser.addRoutine("POS4Bump Auto", autoRoutines::POS4Bump);
         
         //POS5 AUTOS
-        autoChooser.addRoutine("POS5Bump Auto", autoRoutines::POS5Bump);
+        //autoChooser.addRoutine("POS5Bump Auto", autoRoutines::POS5Bump);
         autoChooser.addRoutine("Screw You Auto", autoRoutines::ScrewYou);
         autoChooser.addRoutine("Paul Auto", autoRoutines::Paul);
+
+        //TRENCH AUTOS
+        autoChooser.addRoutine("Left Trench Shoot 1X Auto", autoRoutines::POS6TrenchShootAuto);
+        autoChooser.addRoutine("Left Trench Shoot 2X Auto", autoRoutines::POS6TrenchShootx2Auto);
+        autoChooser.addRoutine("Right Trench Shoot 1X Auto", autoRoutines::POS7TrenchShootAuto);
+        autoChooser.addRoutine("Right Trench Shoot 2X Auto", autoRoutines::POS7TrenchShootx2Auto);
 
         //DO NOTHING AUTO
         autoChooser.addRoutine("Do Nothing", autoRoutines::doNothingAuto);
@@ -133,11 +139,13 @@ public class RobotContainer {
         hid1.button(2).whileTrue(new IntakeUp (intakePosition));
 
         hid1.button(6).whileTrue(new ShooterRun(shooter));
+        hid1.button(6).whileTrue(new RepeatCommand(new SequentialCommandGroup(new IntakeBumpPosition(intakePosition), new IntakeDown(intakePosition))));
         hid1.button(6).and(shooter::atSpeed).whileTrue(new IndexerRun(indexer));
         driveJoystick.button(9).whileTrue(new IntakeBumpPosition(intakePosition));
 
         driveJoystick.button(10).whileTrue(new ShooterRun(shooter));
         driveJoystick.button(10).and(shooter::atSpeed).and(drivetrain::isPointedAtHub).whileTrue(new IndexerRun(indexer));
+        driveJoystick.button(10).and(shooter::atSpeed).and(drivetrain::isPointedAtHub).whileTrue(new RepeatCommand(new SequentialCommandGroup(new IntakeBumpPosition(intakePosition), new IntakeDown(intakePosition))));
 
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
