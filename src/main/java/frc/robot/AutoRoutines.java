@@ -15,6 +15,8 @@ import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.ClimberUp;
@@ -43,6 +45,7 @@ public class AutoRoutines {
     private final Shooter m_shooter;
     private final Indexer m_indexer;
     private final IntakePosition m_intakepos;
+    private Field2d field = new Field2d();
 
     public AutoRoutines(AutoFactory factory, CommandSwerveDrivetrain drivetrain, Climber climber, Intake intake, Shooter shooter, Indexer indexer, IntakePosition intakepos) {
         m_factory = factory;
@@ -52,6 +55,8 @@ public class AutoRoutines {
         m_shooter = shooter;
         m_indexer = indexer;
         m_intakepos = intakepos;
+
+        SmartDashboard.putData("Auto Field", field);
     }
 
     public AutoRoutine doNothingAuto() {
@@ -145,8 +150,11 @@ public class AutoRoutines {
 
     public AutoRoutine POS2BackShootClimb() {
         final AutoRoutine routine = m_factory.newRoutine("POS2BackShootClimb Auto");
-        final AutoTrajectory POS2BackShootClimbPath1 = routine.trajectory("POS2BackShootClimb1");
+        final AutoTrajectory POS2BackShootClimbPath1 = routine.trajectory("POS2BackShootClimb1RED");
         final AutoTrajectory POS2BackShootClimbPath2 = routine.trajectory("POS2BackShootClimb2");
+        
+        field.getObject("traj").setPoses(POS2BackShootClimbPath1.getFinalPose().get());
+        
         routine.active().onTrue(
             POS2BackShootClimbPath1.resetOdometry()
             .andThen(POS2BackShootClimbPath1.cmd())
@@ -357,7 +365,6 @@ public class AutoRoutines {
             .andThen(new IndexerStop(m_indexer))
             .andThen(new ShooterStop(m_shooter))
             .andThen(new WaitCommand(2))
-            .andThen(new IntakeDown(m_intakepos))
             .andThen(new IntakeRun(m_intake))
             .andThen(POS6TrenchShootx2Path2.cmd())
             .andThen(new ShooterRun(m_shooter))
@@ -387,7 +394,6 @@ public class AutoRoutines {
             .andThen(new IndexerStop(m_indexer))
             .andThen(new ShooterStop(m_shooter))
             .andThen(new WaitCommand(2))
-            .andThen(new IntakeDown(m_intakepos))
             .andThen(new IntakeRun(m_intake))
             .andThen(POS7TrenchShootx2Path2.cmd())
             .andThen(new ShooterRun(m_shooter))
@@ -412,6 +418,15 @@ public class AutoRoutines {
             .andThen(new IntakeRun(m_intake))
             .andThen(ScrewYouTrenchPath2.cmd())
         );                                                                                                                
+        return routine;
+    }
+    public AutoRoutine TestAutoSquare() {
+        final AutoRoutine routine = m_factory.newRoutine("Test Auto");
+        final AutoTrajectory TestPath = routine.trajectory("Test");
+        
+        routine.active().onTrue(TestPath.resetOdometry()
+        .andThen(TestPath.cmd())
+        );
         return routine;
     }
 }

@@ -31,13 +31,18 @@ public class IntakeUp extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intakePosition.stopIntake();
+    if (!DriverStation.isAutonomous()) {
+      intakePosition.stopIntake();
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     if (DriverStation.isAutonomous()) {
+      return true;
+    }
+    if (DriverStation.isTeleop() && intakePosition.atUpPosition()) {
       return true;
     }
     return false;
