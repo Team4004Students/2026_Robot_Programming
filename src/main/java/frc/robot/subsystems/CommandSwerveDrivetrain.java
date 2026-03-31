@@ -64,7 +64,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final PIDController m_pathXController = new PIDController(10, 0, 0);
     private final PIDController m_pathYController = new PIDController(10, 0, 0);
     private final PIDController m_pathThetaController = new PIDController(7, 0, 0);
-    private final Transform2d cameraToRobot = new Transform2d(new Translation2d(0.1524, -0.3302), new Rotation2d());
+    private final Transform2d cameraToRobot = new Transform2d(new Translation2d(-0.2794, -0.3048), new Rotation2d(180));
 
     /* Swerve requests to apply during SysId characterization */
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
@@ -413,12 +413,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         targetSpeeds.vxMetersPerSecond += m_pathXController.calculate(
             pose.getX(), sample.x
         );
-        targetSpeeds.vxMetersPerSecond *= -1;
+        //targetSpeeds.vxMetersPerSecond *= -1;
         
         targetSpeeds.vyMetersPerSecond += m_pathYController.calculate(
             pose.getY(), sample.y
         );
-        targetSpeeds.vyMetersPerSecond *= -1;
+        //targetSpeeds.vyMetersPerSecond *= -1;
 
         targetSpeeds.omegaRadiansPerSecond += m_pathThetaController.calculate(
             pose.getRotation().getRadians(), sample.heading
@@ -476,7 +476,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
         boolean hasTarget = limelight.getEntry("tv").getDouble(0) == 1;
 
-        if (hasTarget) {
+        if (hasTarget && !DriverStation.isAutonomous() && !DriverStation.isDisabled()) {
         
             // AprilTag ID
             int tagID = (int) limelight.getEntry("tid").getDouble(-1);
