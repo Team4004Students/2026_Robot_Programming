@@ -49,7 +49,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private boolean pointedAtHub = false;
     public static double hubDistance = 1.0;
     
-    private NetworkTable limelight;
+    //private NetworkTable limelight;
     private NetworkTable swerveTable = NetworkTableInstance.getDefault().getTable("swerve");
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
@@ -64,7 +64,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final PIDController m_pathXController = new PIDController(10, 0, 0);
     private final PIDController m_pathYController = new PIDController(10, 0, 0);
     private final PIDController m_pathThetaController = new PIDController(7, 0, 0);
-    private final Transform2d cameraToRobot = new Transform2d(new Translation2d(-0.2794, -0.3048), new Rotation2d(180));
+   // private final Transform2d cameraToRobot = new Transform2d(new Translation2d(-0.2794, -0.3048), new Rotation2d(180));
 
     /* Swerve requests to apply during SysId characterization */
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
@@ -473,7 +473,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
 
-        limelight = NetworkTableInstance.getDefault().getTable("limelight");
+     /* limelight = NetworkTableInstance.getDefault().getTable("limelight");
         boolean hasTarget = limelight.getEntry("tv").getDouble(0) == 1;
 
         if (hasTarget && !DriverStation.isAutonomous() && !DriverStation.isDisabled()) {
@@ -498,7 +498,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             this.addVisionMeasurement(robotPose, Timer.getFPGATimestamp());
         } else {
             //System.out.println("No AprilTag detected");
-        }
+        }*/   
 
         this.distanceFromHub();
 

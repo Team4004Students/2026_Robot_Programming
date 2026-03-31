@@ -420,4 +420,13 @@ public class AutoRoutines {
         );                                                                                                                
         return routine;
     }
+    public AutoRoutine TestAutoSquare() {
+        final AutoRoutine routine = m_factory.newRoutine("Test Auto");
+        final AutoTrajectory TestPath = routine.trajectory("Test");
+        
+        routine.active().onTrue(TestPath.resetOdometry()
+        .andThen(TestPath.cmd())
+        );
+        return routine;
+    }
 }

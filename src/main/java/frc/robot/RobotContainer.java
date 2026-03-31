@@ -114,6 +114,7 @@ public class RobotContainer {
         autoChooser.addRoutine("Left Trench Shoot 2X Auto", autoRoutines::POS6TrenchShootx2Auto);
         autoChooser.addRoutine("Right Trench Shoot 1X Auto", autoRoutines::POS7TrenchShootAuto);
         autoChooser.addRoutine("Right Trench Shoot 2X Auto", autoRoutines::POS7TrenchShootx2Auto);
+        autoChooser.addRoutine("Test Auto", autoRoutines::TestAutoSquare);
 
         //DO NOTHING AUTO
         autoChooser.addRoutine("Do Nothing", autoRoutines::doNothingAuto);
