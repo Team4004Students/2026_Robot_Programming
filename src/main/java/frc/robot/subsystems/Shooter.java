@@ -91,6 +91,12 @@ public class Shooter extends SubsystemBase {
       return false;
     }
   }
+
+  public void autoShooter() {
+    if (CommandSwerveDrivetrain.inAllianceArea) {
+      this.runShooter();
+    }
+  }
   
   @Override
   public void periodic() {

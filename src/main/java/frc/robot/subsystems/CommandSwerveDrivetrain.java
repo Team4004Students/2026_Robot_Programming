@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
+import frc.robot.commands.ShooterRun;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -45,11 +45,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private static final double kSimLoopPeriod = 0.004; // 4 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+    private double blueHubX = 4.61;
+    private double blueHubY = 4.02;
+    private double redHubX = 11.91;
+    private double redHubY = 4.02;
+    
 
     private boolean pointedAtHub = false;
     public static double hubDistance = 1.0;
+    public static boolean inAllianceArea = false;
     
-    //private NetworkTable limelight;
+    private NetworkTable limelight;
     private NetworkTable swerveTable = NetworkTableInstance.getDefault().getTable("swerve");
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
@@ -64,7 +70,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final PIDController m_pathXController = new PIDController(10, 0, 0);
     private final PIDController m_pathYController = new PIDController(10, 0, 0);
     private final PIDController m_pathThetaController = new PIDController(7, 0, 0);
-   // private final Transform2d cameraToRobot = new Transform2d(new Translation2d(-0.2794, -0.3048), new Rotation2d(180));
+    private final Transform2d cameraToRobot = new Transform2d(new Translation2d(0.1524, -0.3302), new Rotation2d());
 
     /* Swerve requests to apply during SysId characterization */
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
@@ -241,10 +247,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public void distanceFromHub() {
-        double blueHubX = 4.61;
-        double blueHubY = 4.02;
-        double redHubX = 11.91;
-        double redHubY = 4.02;
         double robotX;
         double robotY;
         double hubX;
@@ -280,6 +282,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         double distance = Math.sqrt(errorX * errorX + errorY * errorY);
 
         hubDistance = distance;
+    }
+
+    public void autoShoot() {
+        double robotX = this.getState().Pose.getX();
+        Optional<Alliance> ally = DriverStation.getAlliance();
+        
+        if (ally.get()==Alliance.Blue && robotX <= blueHubX) {
+            inAllianceArea = true;
+        }
+
+        if (ally.get()==Alliance.Red && robotX >= redHubX) {
+            inAllianceArea = true;
+        }
     }
 
     
@@ -413,12 +428,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         targetSpeeds.vxMetersPerSecond += m_pathXController.calculate(
             pose.getX(), sample.x
         );
-        //targetSpeeds.vxMetersPerSecond *= -1;
+        targetSpeeds.vxMetersPerSecond *= -1;
         
         targetSpeeds.vyMetersPerSecond += m_pathYController.calculate(
             pose.getY(), sample.y
         );
-        //targetSpeeds.vyMetersPerSecond *= -1;
+        targetSpeeds.vyMetersPerSecond *= -1;
 
         targetSpeeds.omegaRadiansPerSecond += m_pathThetaController.calculate(
             pose.getRotation().getRadians(), sample.heading
@@ -473,10 +488,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
 
-     /* limelight = NetworkTableInstance.getDefault().getTable("limelight");
+        limelight = NetworkTableInstance.getDefault().getTable("limelight");
         boolean hasTarget = limelight.getEntry("tv").getDouble(0) == 1;
 
-        if (hasTarget && !DriverStation.isAutonomous() && !DriverStation.isDisabled()) {
+        if (hasTarget) {
         
             // AprilTag ID
             int tagID = (int) limelight.getEntry("tid").getDouble(-1);
@@ -498,9 +513,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             this.addVisionMeasurement(robotPose, Timer.getFPGATimestamp());
         } else {
             //System.out.println("No AprilTag detected");
-        }*/   
+        }
 
         this.distanceFromHub();
+        this.autoShoot();
 
         swerveTable.getEntry("Robot X").setDouble(this.getState().Pose.getX());
         swerveTable.getEntry("Robot Y").setDouble(this.getState().Pose.getY());
