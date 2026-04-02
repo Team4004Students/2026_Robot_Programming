@@ -118,12 +118,12 @@ public class IntakePosition extends SubsystemBase {
 
   public void intakeUpPosition() {
     if (!ignoreUpDown) {
-      intakePositionMotor.setControl(new MotionMagicVoltage(0.286 * GEAR_RATIO));
+      intakePositionMotor.setControl(new MotionMagicVoltage(0.758 * GEAR_RATIO));
     }
   }
 
   public boolean atUpPosition() {
-    if (getIntakePositionValue() >= 0.276 && getIntakePositionValue() <= 0.296) {
+    if (getIntakePositionValue() >= 0.748 && getIntakePositionValue() <= 0.768) {
       return true;
     }
     return false;
@@ -131,12 +131,12 @@ public class IntakePosition extends SubsystemBase {
 
   public void intakeDownPosition() {
     if (!ignoreUpDown) {
-      intakePositionMotor.setControl(new MotionMagicVoltage(0.0 * GEAR_RATIO));
+      intakePositionMotor.setControl(new MotionMagicVoltage(0.498 * GEAR_RATIO));
     }
   }
 
   public boolean atDownPosition() {
-    if (getIntakePositionValue() >= 0.0 && getIntakePositionValue() <= 0.010) {
+    if (getIntakePositionValue() >= 0.488 && getIntakePositionValue() <= 0.508) {
       return true;
     }
     return false;
@@ -144,11 +144,11 @@ public class IntakePosition extends SubsystemBase {
 
   public void intakeBumpPosition() {
     ignoreUpDown = true;
-    intakePositionMotor.setControl(new MotionMagicVoltage(0.164 * GEAR_RATIO));
+    intakePositionMotor.setControl(new MotionMagicVoltage(0.605 * GEAR_RATIO));
   }
 
   public boolean atBumpPosition() {
-    if (getIntakePositionValue() >= 0.154 && getIntakePositionValue() <= 0.174) {
+    if (getIntakePositionValue() >= 0.595 && getIntakePositionValue() <= 0.615) {
       return true;
     }
     return false;

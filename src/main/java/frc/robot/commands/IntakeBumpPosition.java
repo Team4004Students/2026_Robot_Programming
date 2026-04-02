@@ -33,7 +33,7 @@ public class IntakeBumpPosition extends Command {
   public void end(boolean interrupted) {
     if (!DriverStation.isAutonomous()) {
       intakePosition.ignoreUpDown = false;
-      intakePosition.stopIntake();
+      //intakePosition.stopIntake();
     }
   }
 

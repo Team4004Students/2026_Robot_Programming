@@ -13,18 +13,19 @@ public class AutoShooter extends Command {
   /** Creates a new AutoShooter. */
   public AutoShooter(Shooter copyShooter) {
     shooter = copyShooter;
+    addRequirements(shooter);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    shooter.autoShooter();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    shooter.autoShooter();
+  }
 
   // Called once the command ends or is interrupted.
   @Override

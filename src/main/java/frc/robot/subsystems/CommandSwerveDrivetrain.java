@@ -428,12 +428,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         targetSpeeds.vxMetersPerSecond += m_pathXController.calculate(
             pose.getX(), sample.x
         );
-        targetSpeeds.vxMetersPerSecond *= -1;
+        //targetSpeeds.vxMetersPerSecond *= -1;
         
         targetSpeeds.vyMetersPerSecond += m_pathYController.calculate(
             pose.getY(), sample.y
         );
-        targetSpeeds.vyMetersPerSecond *= -1;
+        //targetSpeeds.vyMetersPerSecond *= -1;
 
         targetSpeeds.omegaRadiansPerSecond += m_pathThetaController.calculate(
             pose.getRotation().getRadians(), sample.heading
@@ -491,7 +491,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
         boolean hasTarget = limelight.getEntry("tv").getDouble(0) == 1;
 
-        if (hasTarget) {
+        if (hasTarget && !DriverStation.isAutonomous() && !DriverStation.isDisabled()) {
         
             // AprilTag ID
             int tagID = (int) limelight.getEntry("tid").getDouble(-1);

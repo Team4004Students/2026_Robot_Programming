@@ -137,8 +137,8 @@ public class RobotContainer {
         indexer.setDefaultCommand(new IndexerStop(indexer));
         intake.setDefaultCommand(new IntakeStop(intake));
 
-        hid1.button(7).whileTrue(new ClimberUp (climber));
-        hid1.button(8).whileTrue(new ClimberDown (climber));
+        //hid1.button(7).whileTrue(new ClimberUp (climber));
+        //hid1.button(8).whileTrue(new ClimberDown (climber));
         hid1.button(4).whileTrue(new IntakeRun (intake));
         hid1.button(3).whileTrue(new IntakeDown (intakePosition));
         hid1.button(2).whileTrue(new IntakeUp (intakePosition));
