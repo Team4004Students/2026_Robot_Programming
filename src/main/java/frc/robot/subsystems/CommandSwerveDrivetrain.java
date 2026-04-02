@@ -70,7 +70,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final PIDController m_pathXController = new PIDController(10, 0, 0);
     private final PIDController m_pathYController = new PIDController(10, 0, 0);
     private final PIDController m_pathThetaController = new PIDController(7, 0, 0);
-    private final Transform2d cameraToRobot = new Transform2d(new Translation2d(0.1524, -0.3302), new Rotation2d());
+    //private final Transform2d cameraToRobot = new Transform2d(new Translation2d(0.1524, -0.3302), new Rotation2d());
 
     /* Swerve requests to apply during SysId characterization */
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
@@ -509,8 +509,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 .getDoubleArray(new double[6]);
 
             Pose2d visionPose = new Pose2d(botPose[0], botPose[1], new Rotation2d(Math.toRadians(botPose[5])));
-            Pose2d robotPose = visionPose.transformBy(cameraToRobot);
-            this.addVisionMeasurement(robotPose, Timer.getFPGATimestamp());
+            //Pose2d robotPose = visionPose.transformBy(cameraToRobot);
+            this.addVisionMeasurement(visionPose, Timer.getFPGATimestamp() - 0.025);
         } else {
             //System.out.println("No AprilTag detected");
         }
