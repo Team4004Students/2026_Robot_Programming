@@ -49,11 +49,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private double blueHubY = 4.02;
     private double redHubX = 11.91;
     private double redHubY = 4.02;
+    private double hubX;
+    private double hubY;
     
 
     private boolean pointedAtHub = false;
     public static double hubDistance = 1.0;
-    public static boolean inAllianceArea = false;
+    public static boolean inAllianceArea = true;
     
     private NetworkTable limelight;
     private NetworkTable swerveTable = NetworkTableInstance.getDefault().getTable("swerve");
@@ -194,8 +196,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         double robotX;
         double robotY;
         double robotHeading;
-        double hubX;
-        double hubY;
 
         double errorX;
         double errorY;
@@ -285,15 +285,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public void autoShoot() {
+        //Optional<Alliance> ally = DriverStation.getAlliance();
         double robotX = this.getState().Pose.getX();
-        Optional<Alliance> ally = DriverStation.getAlliance();
-        
-        if (ally.get()==Alliance.Blue && robotX <= blueHubX) {
-            inAllianceArea = true;
-        }
+        //hubX = blueHubX;
 
-        if (ally.get()==Alliance.Red && robotX >= redHubX) {
-            inAllianceArea = true;
+        /*if (ally.isPresent()) {
+            if (ally.get()==Alliance.Red){
+              hubX = redHubX;
+            }
+        }*/
+        if (robotX >= blueHubX && robotX <= redHubX) {
+            inAllianceArea = false;
         }
     }
 
@@ -501,7 +503,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             Optional<Alliance> ally = DriverStation.getAlliance();
             if (ally.isPresent()) {
                 if (ally.get()==Alliance.Red) {
-                    whichAlliance = "botpose_wpiblue";
+                    whichAlliance = "botpose_wpired";
                 }
             }
             double[] botPose = limelight

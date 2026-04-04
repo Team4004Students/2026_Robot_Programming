@@ -29,6 +29,7 @@ import frc.robot.commands.ClimberDown;
 import frc.robot.commands.ClimberUp;
 import frc.robot.commands.IntakeUp;
 import frc.robot.commands.IntakeRun;
+import frc.robot.commands.IntakeShootPosition;
 import frc.robot.commands.IntakeStop;
 import frc.robot.commands.ShooterRun;
 import frc.robot.commands.ShooterStop;
@@ -48,7 +49,7 @@ import java.util.function.BooleanSupplier;
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-    private final double SpeedLimit = 0.75 * MaxSpeed;
+    private final double SpeedLimit = 0.60 * MaxSpeed;
     private final double TurnSpeedLimit = 1.5 * MaxSpeed;
     private final double turtleMode = 0.25 * MaxSpeed;
     private final double turtleModeTurn = 0.25 * MaxSpeed;
@@ -117,6 +118,7 @@ public class RobotContainer {
         autoChooser.addRoutine("Right Trench Shoot 1X Auto", autoRoutines::POS6TrenchShootAuto);
         autoChooser.addRoutine("Right Trench Shoot 2X Auto", autoRoutines::POS6TrenchShootx2Auto);
         autoChooser.addRoutine("POS4Bump Auto", autoRoutines::POS4Bump);
+        autoChooser.addRoutine("Left Trench Shoot Under 1X Auto", autoRoutines::POS7TrenchShootUnderAuto);
         //SQUARE AUTO
         autoChooser.addRoutine("Test Auto", autoRoutines::TestAutoSquare);
 
@@ -145,14 +147,14 @@ public class RobotContainer {
 
         hid1.button(7).whileTrue(new ShooterRun(shooter));
         hid1.button(6).and(shooter::atSpeed).whileTrue(new IndexerRun(indexer));
-        //hid1.button(6).whileTrue(new RepeatCommand(new SequentialCommandGroup(new IntakeBumpPosition(intakePosition), new IntakeDown(intakePosition))));
+        hid1.button(6).whileTrue(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(intakePosition), new IntakeDown(intakePosition))));
         hid1.button(8).whileTrue(new ShooterStop(shooter));
         hid1.button(7).and(hid1.button(8)).whileFalse(new AutoShooter(shooter));
 
         driveJoystick.button(9).whileTrue(new IntakeBumpPosition(intakePosition));
         driveJoystick.button(10).whileTrue(new ShooterRun(shooter));
         driveJoystick.button(10).and(shooter::atSpeed).and(drivetrain::isPointedAtHub).whileTrue(new IndexerRun(indexer));
-        //driveJoystick.button(10).and(shooter::atSpeed).and(drivetrain::isPointedAtHub).whileTrue(new RepeatCommand(new SequentialCommandGroup(new IntakeBumpPosition(intakePosition), new IntakeDown(intakePosition))));
+        driveJoystick.button(10).and(shooter::atSpeed).and(drivetrain::isPointedAtHub).whileTrue(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(intakePosition), new IntakeDown(intakePosition))));
 
 
         // Note that X is defined as forward according to WPILib convention,

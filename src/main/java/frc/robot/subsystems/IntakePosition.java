@@ -154,6 +154,21 @@ public class IntakePosition extends SubsystemBase {
     return false;
   }
 
+
+    public void intakeShootPosition() {
+    if (!ignoreUpDown) {
+      intakePositionMotor.setControl(new MotionMagicVoltage(0.732 * GEAR_RATIO));
+    }
+  }
+
+  public boolean atShootPosition() {
+    if (getIntakePositionValue() >= 0.722 && getIntakePositionValue() <= 0.742) {
+      return true;
+    }
+    return false;
+  }
+
+
   public void stopIntake() {
     intakePositionMotor.setControl(new VoltageOut(0.0));
   }

@@ -23,6 +23,8 @@ import frc.robot.commands.ClimberUp;
 import frc.robot.commands.IndexerRun;
 import frc.robot.commands.IndexerStop;
 import frc.robot.commands.IntakeDown;
+import frc.robot.commands.IntakeBumpPosition;
+import frc.robot.commands.IntakeShootPosition;
 import frc.robot.commands.IntakeUp;
 import frc.robot.commands.IntakeRun;
 import frc.robot.commands.ShooterRun;
@@ -228,6 +230,10 @@ public class AutoRoutines {
             .andThen(POS4BumpPath1.cmd())
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
             .andThen(new IndexerRun(m_indexer))
+            .andThen(new IntakeBumpPosition(m_intakepos))
+            .andThen(new IntakeDown(m_intakepos))
+            .andThen(new IntakeBumpPosition(m_intakepos))
+            .andThen(new IntakeDown(m_intakepos))
             .andThen(new WaitCommand(5.0))
             .andThen(new IndexerStop(m_indexer))
             .andThen(new ShooterStop(m_shooter))
@@ -321,6 +327,10 @@ public class AutoRoutines {
             .andThen(new ShooterRun(m_shooter))
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
             .andThen(new IndexerRun(m_indexer))
+            .andThen(new IntakeShootPosition(m_intakepos))
+            .andThen(new IntakeDown(m_intakepos))
+            .andThen(new IntakeShootPosition(m_intakepos))
+            .andThen(new IntakeDown(m_intakepos))
             .andThen(new WaitCommand(5))
             .andThen(new IndexerStop(m_indexer))
             .andThen(new ShooterStop(m_shooter))
@@ -341,6 +351,33 @@ public class AutoRoutines {
             .andThen(new ShooterRun(m_shooter))
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
             .andThen(new IndexerRun(m_indexer))
+            .andThen(new IntakeShootPosition(m_intakepos))
+            .andThen(new IntakeDown(m_intakepos))
+            .andThen(new IntakeShootPosition(m_intakepos))
+            .andThen(new IntakeDown(m_intakepos))
+            .andThen(new WaitCommand(5))
+            .andThen(new IndexerStop(m_indexer))
+            .andThen(new ShooterStop(m_shooter))
+            
+        );                                                                                                                
+        return routine;
+    }
+        public AutoRoutine POS7TrenchShootUnderAuto() {
+        final AutoRoutine routine = m_factory.newRoutine("POS7TrenchShootUnder Auto");
+        final AutoTrajectory POS7TrenchShootUnderPath = routine.trajectory("POS7TrenchShootUnder");
+
+        routine.active().onTrue(
+            POS7TrenchShootUnderPath.resetOdometry()
+            .andThen(new IntakeDown(m_intakepos))
+            .andThen(new IntakeRun(m_intake))
+            .andThen(POS7TrenchShootUnderPath.cmd())
+            .andThen(new ShooterRun(m_shooter))
+            .andThen(new WaitUntilCommand(m_shooter::atSpeed))
+            .andThen(new IndexerRun(m_indexer))
+            .andThen(new IntakeShootPosition(m_intakepos))
+            .andThen(new IntakeDown(m_intakepos))
+            .andThen(new IntakeShootPosition(m_intakepos))
+            .andThen(new IntakeDown(m_intakepos))
             .andThen(new WaitCommand(5))
             .andThen(new IndexerStop(m_indexer))
             .andThen(new ShooterStop(m_shooter))
@@ -361,16 +398,20 @@ public class AutoRoutines {
             .andThen(new ShooterRun(m_shooter))
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
             .andThen(new IndexerRun(m_indexer))
-            .andThen(new WaitCommand(5))
+            .andThen(new IntakeShootPosition(m_intakepos))
+            .andThen(new WaitCommand(2.5))
+            .andThen(new IntakeDown(m_intakepos))
             .andThen(new IndexerStop(m_indexer))
             .andThen(new ShooterStop(m_shooter))
-            .andThen(new WaitCommand(2))
+           // .andThen(new WaitCommand(2))
             .andThen(new IntakeRun(m_intake))
             .andThen(POS6TrenchShootx2Path2.cmd())
             .andThen(new ShooterRun(m_shooter))
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
             .andThen(new IndexerRun(m_indexer))
-            .andThen(new WaitCommand(5))
+            .andThen(new IntakeShootPosition(m_intakepos))
+            .andThen(new WaitCommand(2))
+           // .andThen(new IntakeDown(m_intakepos))
             .andThen(new IndexerStop(m_indexer))
             .andThen(new ShooterStop(m_shooter))
            
@@ -390,16 +431,20 @@ public class AutoRoutines {
             .andThen(new ShooterRun(m_shooter))
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
             .andThen(new IndexerRun(m_indexer))
-            .andThen(new WaitCommand(5))
+            .andThen(new IntakeShootPosition(m_intakepos))
+            .andThen(new WaitCommand(2))
+            .andThen(new IntakeDown(m_intakepos))
             .andThen(new IndexerStop(m_indexer))
             .andThen(new ShooterStop(m_shooter))
-            .andThen(new WaitCommand(2))
+           // .andThen(new WaitCommand(2))
             .andThen(new IntakeRun(m_intake))
             .andThen(POS7TrenchShootx2Path2.cmd())
             .andThen(new ShooterRun(m_shooter))
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
             .andThen(new IndexerRun(m_indexer))
-            .andThen(new WaitCommand(5))
+            .andThen(new IntakeShootPosition(m_intakepos))
+           // .andThen(new WaitCommand(2.5))
+            .andThen(new IntakeDown(m_intakepos))
             .andThen(new IndexerStop(m_indexer))
             .andThen(new ShooterStop(m_shooter))
            
