@@ -116,7 +116,7 @@ public class RobotContainer {
         autoChooser.addRoutine("Left Trench Shoot 2X Auto", autoRoutines::POS7TrenchShootx2Auto);
         autoChooser.addRoutine("Right Trench Shoot 1X Auto", autoRoutines::POS6TrenchShootAuto);
         autoChooser.addRoutine("Right Trench Shoot 2X Auto", autoRoutines::POS6TrenchShootx2Auto);
-
+        autoChooser.addRoutine("POS4Bump Auto", autoRoutines::POS4Bump);
         //SQUARE AUTO
         autoChooser.addRoutine("Test Auto", autoRoutines::TestAutoSquare);
 
@@ -161,36 +161,36 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
-                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
+                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
+                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
                     .withRotationalRate(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-hid1.getX() * 1.425,Steerdeadband),Exponent) * MaxAngularRate, -TurnSpeedLimit, TurnSpeedLimit)) // Drive counterclockwise with negative X (left)
             )
         ); 
 
         driveJoystick.button(1).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
-                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -turtleMode, turtleMode)) // Drive forward with negative Y (forward)
-                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -turtleMode, turtleMode)) // Drive left with negative X (left)
+                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -turtleMode, turtleMode)) // Drive forward with negative Y (forward)
+                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -turtleMode, turtleMode)) // Drive left with negative X (left)
                     .withRotationalRate(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-hid1.getX(),Steerdeadband),Exponent) * MaxAngularRate, -turtleModeTurn, turtleModeTurn))) // Drive counterclockwise with negative X (left)
             )
         );
 
         driveJoystick.button(2).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
-                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -turboMode, turboMode)) // Drive forward with negative Y (forward)
-                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -turboMode, turboMode)) // Drive left with negative X (left)
+                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -turboMode, turboMode)) // Drive forward with negative Y (forward)
+                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -turboMode, turboMode)) // Drive left with negative X (left)
                     .withRotationalRate(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-hid1.getX() * 2.85,Steerdeadband),Exponent) * MaxAngularRate, -turboModeTurn, turboModeTurn))) // Drive counterclockwise with negative X (left)
             )
         );
 
         driveJoystick.button(10).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
-                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
-                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
+                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
+                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
                     .withRotationalRate(drivetrain.pointAtHub() * MaxAngularRate)) // Drive counterclockwise with negative X (left)
             )
         );
 
         driveJoystick.button(9).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
-                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
-                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
+                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
+                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
                     .withRotationalRate(drivetrain.bumpAssist() * MaxAngularRate)) // Drive counterclockwise with negative X (left)
             )
         );

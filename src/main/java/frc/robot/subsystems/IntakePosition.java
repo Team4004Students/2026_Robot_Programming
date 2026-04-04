@@ -118,12 +118,12 @@ public class IntakePosition extends SubsystemBase {
 
   public void intakeUpPosition() {
     if (!ignoreUpDown) {
-      intakePositionMotor.setControl(new MotionMagicVoltage(0.758 * GEAR_RATIO));
+      intakePositionMotor.setControl(new MotionMagicVoltage(0.860 * GEAR_RATIO));
     }
   }
 
   public boolean atUpPosition() {
-    if (getIntakePositionValue() >= 0.748 && getIntakePositionValue() <= 0.768) {
+    if (getIntakePositionValue() >= 0.850 && getIntakePositionValue() <= 0.870) {
       return true;
     }
     return false;
