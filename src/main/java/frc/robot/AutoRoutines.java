@@ -444,7 +444,7 @@ public class AutoRoutines {
             .andThen(new IndexerRun(m_indexer))
             .andThen(new IntakeShootPosition(m_intakepos))
            // .andThen(new WaitCommand(2.5))
-            .andThen(new IntakeDown(m_intakepos))
+            //.andThen(new IntakeDown(m_intakepos))
             .andThen(new IndexerStop(m_indexer))
             .andThen(new ShooterStop(m_shooter))
            
