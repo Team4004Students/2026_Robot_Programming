@@ -96,6 +96,9 @@ public class Shooter extends SubsystemBase {
     if (CommandSwerveDrivetrain.inAllianceArea) {
       this.runShooter();
     }
+    else {
+      this.stopShooter();
+    }
   }
   
   @Override

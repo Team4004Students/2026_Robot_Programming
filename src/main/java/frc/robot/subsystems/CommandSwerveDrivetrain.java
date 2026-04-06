@@ -297,6 +297,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (robotX >= blueHubX && robotX <= redHubX) {
             inAllianceArea = false;
         }
+        else {
+            inAllianceArea = true;
+        }
     }
 
     

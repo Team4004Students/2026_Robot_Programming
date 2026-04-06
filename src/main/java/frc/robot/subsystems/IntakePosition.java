@@ -26,6 +26,8 @@ import com.revrobotics.encoder.config.DetachedEncoderConfig;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
+
 import com.ctre.phoenix6.hardware.CANcoder;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
@@ -36,6 +38,7 @@ import static edu.wpi.first.units.Units.Second;
 public class IntakePosition extends SubsystemBase {
   public boolean ignoreUpDown = false;
 
+  private double previousMotorEncoderResetTime = 0.0;
   private TalonFXConfiguration config;
   private DetachedEncoderConfig absEncoderConfig;
   private TalonFX intakePositionMotor;
@@ -43,6 +46,7 @@ public class IntakePosition extends SubsystemBase {
   private DigitalInput topSensor;
   private SplineEncoder absEncoder;
   private final double GEAR_RATIO = 27.0;
+  private final double MOTOR_ENCODER_RESET_INTERVAL = 3.0;
 
 
   private NetworkTable intakePosTable = NetworkTableInstance.getDefault().getTable("intake position");
@@ -93,7 +97,7 @@ public class IntakePosition extends SubsystemBase {
     seedMotorEncoder();
   }
 
-  private void seedMotorEncoder() {
+  public void seedMotorEncoder() {
 
     // MAXSpline returns mechanism rotations (0–1 typically)
     //double mechanismRotations = absEncoder.getPosition();
@@ -118,12 +122,12 @@ public class IntakePosition extends SubsystemBase {
 
   public void intakeUpPosition() {
     if (!ignoreUpDown) {
-      intakePositionMotor.setControl(new MotionMagicVoltage(0.860 * GEAR_RATIO));
+      intakePositionMotor.setControl(new MotionMagicVoltage(0.840 * GEAR_RATIO));
     }
   }
 
   public boolean atUpPosition() {
-    if (getIntakePositionValue() >= 0.850 && getIntakePositionValue() <= 0.870) {
+    if (getIntakePositionValue() >= 0.830 && getIntakePositionValue() <= 0.850) {
       return true;
     }
     return false;
@@ -186,5 +190,12 @@ public class IntakePosition extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     intakePosTable.getEntry("Intake Position Absolute Encoder").setDouble(this.getIntakePositionValue());
+
+    /*
+    if (Timer.getFPGATimestamp() - previousMotorEncoderResetTime >= MOTOR_ENCODER_RESET_INTERVAL) {
+      this.seedMotorEncoder();
+      previousMotorEncoderResetTime = Timer.getFPGATimestamp();
+    }
+    */
   }
 }

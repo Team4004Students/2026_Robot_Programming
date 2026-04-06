@@ -135,27 +135,28 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        shooter.setDefaultCommand(new ShooterStop(shooter));
+        shooter.setDefaultCommand(new AutoShooter(shooter));
         indexer.setDefaultCommand(new IndexerStop(indexer));
         intake.setDefaultCommand(new IntakeStop(intake));
 
         //hid1.button(7).whileTrue(new ClimberUp (climber));
         //hid1.button(8).whileTrue(new ClimberDown (climber));
         hid1.button(4).whileTrue(new IntakeRun (intake));
-        hid1.button(3).whileTrue(new IntakeDown (intakePosition));
-        hid1.button(2).whileTrue(new IntakeUp (intakePosition));
+        hid1.button(3).whileTrue(new IntakeDown (intakePosition).withTimeout(2));
+        hid1.button(2).whileTrue(new IntakeUp (intakePosition).withTimeout(2));
 
         hid1.button(7).whileTrue(new ShooterRun(shooter));
         hid1.button(6).and(shooter::atSpeed).whileTrue(new IndexerRun(indexer));
-        hid1.button(6).whileTrue(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(intakePosition), new IntakeDown(intakePosition))));
+        hid1.button(6).whileTrue(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(intakePosition).withTimeout(2), new IntakeDown(intakePosition).withTimeout(2))));
         hid1.button(8).whileTrue(new ShooterStop(shooter));
-        hid1.button(7).and(hid1.button(8)).whileFalse(new AutoShooter(shooter));
+        //hid1.button(7).and(hid1.button(8)).whileFalse(new AutoShooter(shooter));
 
-        driveJoystick.button(9).whileTrue(new IntakeBumpPosition(intakePosition));
+        driveJoystick.button(9).whileTrue(new IntakeBumpPosition(intakePosition).withTimeout(2));
         driveJoystick.button(10).whileTrue(new ShooterRun(shooter));
         driveJoystick.button(10).and(shooter::atSpeed).and(drivetrain::isPointedAtHub).whileTrue(new IndexerRun(indexer));
-        driveJoystick.button(10).and(shooter::atSpeed).and(drivetrain::isPointedAtHub).whileTrue(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(intakePosition), new IntakeDown(intakePosition))));
-
+        driveJoystick.button(10).and(shooter::atSpeed).and(drivetrain::isPointedAtHub).whileTrue(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(intakePosition).withTimeout(2), new IntakeDown(intakePosition).withTimeout(2))));
+        driveJoystick.button(12).onTrue(Commands.runOnce(intakePosition::seedMotorEncoder));
+        
 
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
