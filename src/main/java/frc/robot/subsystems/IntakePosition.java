@@ -53,6 +53,7 @@ public class IntakePosition extends SubsystemBase {
 
   /** Creates a new IntakePosition. */
   public IntakePosition() {
+    intakePosTable.getEntry("Intake Absolute And Calculated").setString(" ^|^          MUST MATCH          ^|^");
     intakePositionMotor = new TalonFX(32);
     config = new TalonFXConfiguration();
     //encoder = new CANcoder(24);
