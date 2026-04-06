@@ -400,7 +400,8 @@ public class AutoRoutines {
             .andThen(POS6TrenchShootx2Path1.cmd())
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
             .andThen(new IndexerRun(m_indexer))
-            .andThen(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(m_intakepos), new IntakeDown(m_intakepos))).withTimeout(2))
+            .andThen(new IntakeShootPosition(m_intakepos)
+            .andThen(new IntakeDown(m_intakepos))
             .andThen(new IndexerStop(m_indexer))
             //.andThen(new ShooterStop(m_shooter))
            // .andThen(new WaitCommand(2))
@@ -409,13 +410,12 @@ public class AutoRoutines {
             .andThen(new ShooterRun(m_shooter))
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
             .andThen(new IndexerRun(m_indexer))
-            .andThen(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(m_intakepos), new IntakeDown(m_intakepos))).withTimeout(2))
+            .andThen(new RepeatCommand(new IntakeShootPosition(m_intakepos))
             .andThen(new WaitCommand(2))
-           // .andThen(new IntakeDown(m_intakepos))
             .andThen(new IndexerStop(m_indexer))
             .andThen(new ShooterStop(m_shooter))
-           
-        );                                                                                                                
+            )
+            ));                                                                                                                
         return routine;
     }
       public AutoRoutine POS7TrenchShootx2Auto() {
@@ -431,16 +431,18 @@ public class AutoRoutines {
             .andThen(POS7TrenchShootx2Path1.cmd())
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
             .andThen(new IndexerRun(m_indexer))
-            .andThen(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(m_intakepos), new IntakeDown(m_intakepos))).withTimeout(2))
+            .andThen(new IntakeShootPosition(m_intakepos))
+            .andThen(new WaitCommand(1))
+            .andThen(new IntakeDown(m_intakepos))
             .andThen(new IndexerStop(m_indexer))
            // .andThen(new ShooterStop(m_shooter))
-           // .andThen(new WaitCommand(2))
+            .andThen(new WaitCommand(1))
             .andThen(new IntakeRun(m_intake))
             .andThen(POS7TrenchShootx2Path2.cmd())
             .andThen(new ShooterRun(m_shooter))
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
             .andThen(new IndexerRun(m_indexer))
-            .andThen(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(m_intakepos), new IntakeDown(m_intakepos))).withTimeout(2))
+            .andThen(new IntakeShootPosition(m_intakepos))
             .andThen(new WaitCommand(1))
             //.andThen(new IntakeDown(m_intakepos))
             .andThen(new IndexerStop(m_indexer))
