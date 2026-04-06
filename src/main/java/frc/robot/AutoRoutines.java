@@ -154,7 +154,7 @@ public class AutoRoutines {
 
     public AutoRoutine POS2BackShootClimb() {
         final AutoRoutine routine = m_factory.newRoutine("POS2BackShootClimb Auto");
-        final AutoTrajectory POS2BackShootClimbPath1 = routine.trajectory("POS2BackShootClimb1RED");
+        final AutoTrajectory POS2BackShootClimbPath1 = routine.trajectory("POS2BackShootClimb1");
         final AutoTrajectory POS2BackShootClimbPath2 = routine.trajectory("POS2BackShootClimb2");
         
         field.getObject("traj").setPoses(POS2BackShootClimbPath1.getFinalPose().get());
@@ -404,7 +404,7 @@ public class AutoRoutines {
             .andThen(new IntakeDown(m_intakepos))
             .andThen(new IndexerStop(m_indexer))
             //.andThen(new ShooterStop(m_shooter))
-           // .andThen(new WaitCommand(2))
+            .andThen(new WaitCommand(1))
             .andThen(new IntakeRun(m_intake))
             .andThen(POS6TrenchShootx2Path2.cmd())
             .andThen(new ShooterRun(m_shooter))
