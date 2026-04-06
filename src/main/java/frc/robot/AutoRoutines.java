@@ -17,6 +17,8 @@ import choreo.auto.AutoTrajectory;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.ClimberUp;
@@ -398,9 +400,7 @@ public class AutoRoutines {
             .andThen(POS6TrenchShootx2Path1.cmd())
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
             .andThen(new IndexerRun(m_indexer))
-            .andThen(new IntakeShootPosition(m_intakepos))
-            .andThen(new WaitCommand(2.5))
-            .andThen(new IntakeDown(m_intakepos))
+            .andThen(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(m_intakepos), new IntakeDown(m_intakepos))).withTimeout(2))
             .andThen(new IndexerStop(m_indexer))
             //.andThen(new ShooterStop(m_shooter))
            // .andThen(new WaitCommand(2))
@@ -409,7 +409,7 @@ public class AutoRoutines {
             .andThen(new ShooterRun(m_shooter))
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
             .andThen(new IndexerRun(m_indexer))
-            .andThen(new IntakeShootPosition(m_intakepos))
+            .andThen(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(m_intakepos), new IntakeDown(m_intakepos))).withTimeout(2))
             .andThen(new WaitCommand(2))
            // .andThen(new IntakeDown(m_intakepos))
             .andThen(new IndexerStop(m_indexer))
@@ -431,9 +431,7 @@ public class AutoRoutines {
             .andThen(POS7TrenchShootx2Path1.cmd())
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
             .andThen(new IndexerRun(m_indexer))
-            .andThen(new IntakeShootPosition(m_intakepos))
-            .andThen(new WaitCommand(1))
-            .andThen(new IntakeDown(m_intakepos))
+            .andThen(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(m_intakepos), new IntakeDown(m_intakepos))).withTimeout(2))
             .andThen(new IndexerStop(m_indexer))
            // .andThen(new ShooterStop(m_shooter))
            // .andThen(new WaitCommand(2))
@@ -442,7 +440,7 @@ public class AutoRoutines {
             .andThen(new ShooterRun(m_shooter))
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
             .andThen(new IndexerRun(m_indexer))
-            .andThen(new IntakeShootPosition(m_intakepos))
+            .andThen(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(m_intakepos), new IntakeDown(m_intakepos))).withTimeout(2))
             .andThen(new WaitCommand(1))
             //.andThen(new IntakeDown(m_intakepos))
             .andThen(new IndexerStop(m_indexer))
