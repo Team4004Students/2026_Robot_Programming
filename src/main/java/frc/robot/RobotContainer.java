@@ -106,7 +106,7 @@ public class RobotContainer {
 
         //POS4 AUTOS
         //autoChooser.addRoutine("POS4Bump Auto", autoRoutines::POS4Bump);
-        
+        autoChooser.addRoutine("POS4Bump Auto", autoRoutines::POS4Bump);
         //POS5 AUTOS
         //autoChooser.addRoutine("POS5Bump Auto", autoRoutines::POS5Bump);
         autoChooser.addRoutine("Screw You Auto", autoRoutines::ScrewYou);
@@ -117,7 +117,7 @@ public class RobotContainer {
         autoChooser.addRoutine("Left Trench Shoot 2X Auto", autoRoutines::POS7TrenchShootx2Auto);
         autoChooser.addRoutine("Right Trench Shoot 1X Auto", autoRoutines::POS6TrenchShootAuto);
         autoChooser.addRoutine("Right Trench Shoot 2X Auto", autoRoutines::POS6TrenchShootx2Auto);
-        autoChooser.addRoutine("POS4Bump Auto", autoRoutines::POS4Bump);
+        
         autoChooser.addRoutine("Left Trench Shoot Under 1X Auto", autoRoutines::POS7TrenchShootUnderAuto);
         //SQUARE AUTO
         autoChooser.addRoutine("Test Auto", autoRoutines::TestAutoSquare);
