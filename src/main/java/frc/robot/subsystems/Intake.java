@@ -62,7 +62,7 @@ public class Intake extends SubsystemBase {
 
   public void runIntake() {
     intakeRunning = true;
-    double intakeSpeed = 0.65;
+    double intakeSpeed = 0.61;
     if (reverseSwitch.getAsBoolean()) {intakeSpeed *= -1;}    
     intakeMotor.set(intakeSpeed);
   }

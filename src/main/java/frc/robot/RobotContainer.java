@@ -50,11 +50,13 @@ public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
     private final double SpeedLimit = 0.60 * MaxSpeed;
-    private final double TurnSpeedLimit = 1.5 * MaxSpeed;
+    private final double TurnSpeedLimit = 3.0 * MaxSpeed;
     private final double turtleMode = 0.25 * MaxSpeed;
-    private final double turtleModeTurn = 0.25 * MaxSpeed;
+    //private final double turtleModeTurn = 0.25 * MaxSpeed;
+    private final double turtleModeTurn = 1.5 * MaxSpeed;
     private final double turboMode = 1.5 * MaxSpeed;
-    private final double turboModeTurn = 1.75 * MaxSpeed;
+    //private final double turboModeTurn = 1.75 * MaxSpeed;
+    private final double turboModeTurn = 4.6 * MaxSpeed;
     private final double Deadband = 0.1;
     private final double Steerdeadband = 0.05;
     private final double Exponent = 1.0;
@@ -135,7 +137,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        shooter.setDefaultCommand(new AutoShooter(shooter));
+        shooter.setDefaultCommand(new ShooterStop(shooter));
         indexer.setDefaultCommand(new IndexerStop(indexer));
         intake.setDefaultCommand(new IntakeStop(intake));
 
@@ -145,10 +147,13 @@ public class RobotContainer {
         hid1.button(3).whileTrue(new IntakeDown (intakePosition).withTimeout(2));
         hid1.button(2).whileTrue(new IntakeUp (intakePosition).withTimeout(2));
 
+        hid1.button(7).and(hid1.button(8)).whileFalse(new ShooterStop(shooter));
+        hid1.button(8).whileTrue(new AutoShooter(shooter));
+
         hid1.button(7).whileTrue(new ShooterRun(shooter));
         hid1.button(6).and(shooter::atSpeed).whileTrue(new IndexerRun(indexer));
         hid1.button(6).whileTrue(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(intakePosition).withTimeout(2), new IntakeDown(intakePosition).withTimeout(2))));
-        hid1.button(8).whileTrue(new ShooterStop(shooter));
+       // hid1.button(8).whileTrue(new ShooterStop(shooter));
         //hid1.button(7).and(hid1.button(8)).whileFalse(new AutoShooter(shooter));
 
         driveJoystick.button(9).whileTrue(new IntakeBumpPosition(intakePosition).withTimeout(2));

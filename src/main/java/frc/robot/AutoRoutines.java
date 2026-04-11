@@ -25,6 +25,7 @@ import frc.robot.commands.ClimberUp;
 import frc.robot.commands.IndexerRun;
 import frc.robot.commands.IndexerStop;
 import frc.robot.commands.IntakeDown;
+import frc.robot.commands.IntakeReset;
 import frc.robot.commands.IntakeBumpPosition;
 import frc.robot.commands.IntakeShootPosition;
 import frc.robot.commands.IntakeUp;
@@ -321,6 +322,7 @@ public class AutoRoutines {
         final AutoRoutine routine = m_factory.newRoutine("POS6TrenchShoot Auto");
         final AutoTrajectory POS6TrenchShootPath = routine.trajectory("POS6TrenchShoot");
 
+        // region Current Issue
         routine.active().onTrue(
             POS6TrenchShootPath.resetOdometry()
             .andThen(new IntakeDown(m_intakepos))
@@ -337,7 +339,8 @@ public class AutoRoutines {
             .andThen(new IndexerStop(m_indexer))
             .andThen(new ShooterStop(m_shooter))
            
-        );                                                                                                                
+        );      
+        // endregion Current Issue                                                                                                          
         return routine;
     }
     
@@ -345,8 +348,10 @@ public class AutoRoutines {
         final AutoRoutine routine = m_factory.newRoutine("POS7TrenchShoot Auto");
         final AutoTrajectory POS7TrenchShootPath = routine.trajectory("POS7TrenchShoot");
 
+        // region Currently Working
         routine.active().onTrue(
             POS7TrenchShootPath.resetOdometry()
+            .andThen(new IntakeReset(m_intakepos))
             .andThen(new IntakeDown(m_intakepos))
             .andThen(new IntakeRun(m_intake))
             .andThen(POS7TrenchShootPath.cmd())
@@ -361,7 +366,8 @@ public class AutoRoutines {
             .andThen(new IndexerStop(m_indexer))
             .andThen(new ShooterStop(m_shooter))
             
-        );                                                                                                                
+        );   
+        // endregion Currently Working                                                                                                             
         return routine;
     }
         public AutoRoutine POS7TrenchShootUnderAuto() {
@@ -370,6 +376,7 @@ public class AutoRoutines {
 
         routine.active().onTrue(
             POS7TrenchShootUnderPath.resetOdometry()
+            .andThen(new IntakeReset(m_intakepos))
             .andThen(new IntakeDown(m_intakepos))
             .andThen(new IntakeRun(m_intake))
             .andThen(new ShooterRun(m_shooter))
@@ -394,6 +401,7 @@ public class AutoRoutines {
 
         routine.active().onTrue(
             POS6TrenchShootx2Path1.resetOdometry()
+            .andThen(new IntakeReset(m_intakepos))
             .andThen(new IntakeDown(m_intakepos))
             .andThen(new IntakeRun(m_intake))
             .andThen(new ShooterRun(m_shooter))
@@ -425,6 +433,7 @@ public class AutoRoutines {
 
         routine.active().onTrue(
             POS7TrenchShootx2Path1.resetOdometry()
+            .andThen(new IntakeReset(m_intakepos))
             .andThen(new IntakeDown(m_intakepos))
             .andThen(new IntakeRun(m_intake))
             .andThen(new ShooterRun(m_shooter))
@@ -432,11 +441,15 @@ public class AutoRoutines {
             .andThen(new WaitUntilCommand(m_shooter::atSpeed))
             .andThen(new IndexerRun(m_indexer))
             .andThen(new IntakeShootPosition(m_intakepos))
-            .andThen(new WaitCommand(1))
+            .andThen(new WaitCommand(.5))
+            .andThen(new IntakeDown(m_intakepos))
+            .andThen(new WaitCommand(.001))
+            .andThen(new IntakeShootPosition(m_intakepos))
+            .andThen(new WaitCommand(.5))
             .andThen(new IntakeDown(m_intakepos))
             .andThen(new IndexerStop(m_indexer))
            // .andThen(new ShooterStop(m_shooter))
-            .andThen(new WaitCommand(1))
+            .andThen(new WaitCommand(.5))
             .andThen(new IntakeRun(m_intake))
             .andThen(POS7TrenchShootx2Path2.cmd())
             .andThen(new ShooterRun(m_shooter))
