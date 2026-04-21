@@ -49,7 +49,7 @@ import java.util.function.BooleanSupplier;
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-    private final double SpeedLimit = 0.60 * MaxSpeed;
+    private double SpeedLimit = 0.60 * MaxSpeed;
     private final double TurnSpeedLimit = 3.0 * MaxSpeed;
     private final double turtleMode = 0.25 * MaxSpeed;
     //private final double turtleModeTurn = 0.25 * MaxSpeed;
@@ -161,6 +161,8 @@ public class RobotContainer {
         driveJoystick.button(10).and(shooter::atSpeed).and(drivetrain::isPointedAtHub).whileTrue(new IndexerRun(indexer));
         driveJoystick.button(10).and(shooter::atSpeed).and(drivetrain::isPointedAtHub).whileTrue(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(intakePosition).withTimeout(2), new IntakeDown(intakePosition).withTimeout(2))));
         driveJoystick.button(12).onTrue(Commands.runOnce(intakePosition::seedMotorEncoder));
+        driveJoystick.button(7).onTrue(new InstantCommand(() -> SpeedLimit += 0.1));
+        driveJoystick.button(8).onTrue(new InstantCommand(() -> SpeedLimit -= 0.1));
         
 
         // Note that X is defined as forward according to WPILib convention,
