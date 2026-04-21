@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.RobotContainer;
 import frc.robot.commands.ShooterRun;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
@@ -473,6 +474,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return m_sysIdRoutineToApply.dynamic(direction);
     }
 
+    public double getDriveSpeedLimit() {
+        return RobotContainer.SpeedLimit;
+    }
+
     @Override
     public void periodic() {
         /*
@@ -527,6 +532,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         swerveTable.getEntry("Robot Y").setDouble(this.getState().Pose.getY());
         swerveTable.getEntry("Robot Yaw").setDouble(this.getState().Pose.getRotation().getDegrees());
         swerveTable.getEntry("Robot Distance From Hub").setDouble(hubDistance);
+        swerveTable.getEntry("DriveSpeedLimit(Original -> 0.6)").setDouble(this.getDriveSpeedLimit());
+        
     }
 
     private void startSimThread() {
