@@ -67,7 +67,6 @@ public class Shooter extends SubsystemBase {
     leftShooterMotor.getConfigurator().apply(config);
 
     shooterTable.getEntry("Shooter Speed Adjustment").setDouble(shooterSpeedAdjustment);
-    shooterTable.getEntry("ShooterSpeedSetting").setDouble(shooterSpeed);
   }
 
   public double getShooterSpeed() {
@@ -108,6 +107,7 @@ public class Shooter extends SubsystemBase {
   
   @Override
   public void periodic() {
+    shooterTable.getEntry("ShooterSpeedSetting").setDouble(shooterSpeed);
     shooterTable.getEntry("Shooter RPS").setDouble(rightShooterMotor.getVelocity().getValueAsDouble());
     // This method will be called once per scheduler run
     shooterTable.getEntry("AutoShooter").setBoolean(CommandSwerveDrivetrain.inAllianceArea);
