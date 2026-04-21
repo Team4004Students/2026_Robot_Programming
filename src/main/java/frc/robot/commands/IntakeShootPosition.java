@@ -43,7 +43,7 @@ public class IntakeShootPosition extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (DriverStation.isAutonomous()) {
+    if (DriverStation.isAutonomous() && intakePosition.atShootPosition()) {
       return true;
     }
     if (DriverStation.isTeleop() && intakePosition.atShootPosition()) {

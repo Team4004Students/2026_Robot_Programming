@@ -43,7 +43,7 @@ public class IntakeBumpPosition extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (DriverStation.isAutonomous()) {
+    if (DriverStation.isAutonomous() && intakePosition.atBumpPosition()) {
       return true;
     }
     if (DriverStation.isTeleop() && intakePosition.atBumpPosition()) {
