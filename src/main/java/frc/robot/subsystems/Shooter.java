@@ -33,6 +33,7 @@ public class Shooter extends SubsystemBase {
   private NetworkTable shooterTable = NetworkTableInstance.getDefault().getTable("shooter");
   private BooleanSupplier reverseSwitch;
   private double shooterSpeedAdjustment = 1.0;
+  public static double shooterSpeed = 46.0;
 
   /** Creates a new Shooter. */
   public Shooter(BooleanSupplier reverseSwitch) {
@@ -66,12 +67,16 @@ public class Shooter extends SubsystemBase {
     leftShooterMotor.getConfigurator().apply(config);
 
     shooterTable.getEntry("Shooter Speed Adjustment").setDouble(shooterSpeedAdjustment);
+    shooterTable.getEntry("ShooterSpeedSetting").setDouble(shooterSpeed);
+  }
+
+  public double getShooterSpeed() {
+    return Shooter.shooterSpeed;
   }
 
   public void runShooter() {
     //rightShooterMotor.set(shooterSpeed);
     shooterSpeedAdjustment = shooterTable.getEntry("Shooter Speed Adjustment").getDouble(1.0);
-    double shooterSpeed = 46.0;
     shooterSpeed *= shooterSpeedAdjustment;
     if (reverseSwitch.getAsBoolean()) {shooterSpeed *= -1;}
     rightShooterMotor.setControl(new MotionMagicVelocityVoltage(shooterSpeed));

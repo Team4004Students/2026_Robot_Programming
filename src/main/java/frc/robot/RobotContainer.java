@@ -13,6 +13,8 @@ import choreo.auto.AutoFactory;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -47,9 +49,9 @@ import frc.robot.commands.AutoShooter;
 import java.util.function.BooleanSupplier;
 
 public class RobotContainer {
-    private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    public static double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-    private double SpeedLimit = 0.60 * MaxSpeed;
+    public static double SpeedLimit = 0.60 * MaxSpeed;
     private final double TurnSpeedLimit = 3.0 * MaxSpeed;
     private final double turtleMode = 0.25 * MaxSpeed;
     //private final double turtleModeTurn = 0.25 * MaxSpeed;
@@ -60,6 +62,8 @@ public class RobotContainer {
     private final double Deadband = 0.1;
     private final double Steerdeadband = 0.05;
     private final double Exponent = 1.0;
+
+    private NetworkTable speedLimitTable = NetworkTableInstance.getDefault().getTable("Speed Limit");
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -87,6 +91,7 @@ public class RobotContainer {
     private final AutoChooser autoChooser = new AutoChooser();
 
     public RobotContainer() {
+
         //INITIALIZE PATH FOLLOWING
         autoFactory = drivetrain.createAutoFactory();
         autoRoutines = new AutoRoutines(autoFactory, drivetrain, climber, intake, shooter, indexer, intakePosition);
@@ -163,6 +168,8 @@ public class RobotContainer {
         driveJoystick.button(12).onTrue(Commands.runOnce(intakePosition::seedMotorEncoder));
         driveJoystick.button(7).onTrue(new InstantCommand(() -> SpeedLimit += 0.1));
         driveJoystick.button(8).onTrue(new InstantCommand(() -> SpeedLimit -= 0.1));
+        driveJoystick.button(6).onTrue(new InstantCommand(() -> Shooter.shooterSpeed += 1.0));
+        driveJoystick.button(5).onTrue(new InstantCommand(() -> Shooter.shooterSpeed -= 1.0));
         
 
         // Note that X is defined as forward according to WPILib convention,
