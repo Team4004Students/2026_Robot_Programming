@@ -448,14 +448,6 @@ public class AutoRoutines {
             .andThen(new IntakeDown(m_intakepos).withTimeout(1))
             .andThen(new IntakeShootPosition(m_intakepos).withTimeout(1))
             .andThen(new IntakeDown(m_intakepos).withTimeout(1))
-            .andThen(new IntakeShootPosition(m_intakepos).withTimeout(1))
-            .andThen(new IntakeDown(m_intakepos).withTimeout(1))
-            .andThen(new IntakeShootPosition(m_intakepos).withTimeout(1))
-            .andThen(new IntakeDown(m_intakepos).withTimeout(1))
-            .andThen(new IntakeShootPosition(m_intakepos).withTimeout(1))
-            .andThen(new IntakeDown(m_intakepos).withTimeout(1))
-            .andThen(new IntakeShootPosition(m_intakepos).withTimeout(1)) 
-            .andThen(new IntakeDown(m_intakepos).withTimeout(1))
             .andThen(new IndexerStop(m_indexer))
            // .andThen(new ShooterStop(m_shooter))
             .andThen(new WaitCommand(.5))
@@ -470,16 +462,7 @@ public class AutoRoutines {
             .andThen(new IntakeDown(m_intakepos).withTimeout(1))
             .andThen(new IntakeShootPosition(m_intakepos).withTimeout(1))
             .andThen(new IntakeDown(m_intakepos).withTimeout(1))
-            .andThen(new IntakeShootPosition(m_intakepos).withTimeout(1))
-            .andThen(new IntakeDown(m_intakepos).withTimeout(1))
-            .andThen(new IntakeShootPosition(m_intakepos).withTimeout(1))
-            .andThen(new IntakeDown(m_intakepos).withTimeout(1))
-            .andThen(new IntakeShootPosition(m_intakepos).withTimeout(1)) 
-            .andThen(new IntakeDown(m_intakepos).withTimeout(1))
-            .andThen(new IntakeShootPosition(m_intakepos).withTimeout(1))
-            .andThen(new IntakeDown(m_intakepos).withTimeout(1))
-            .andThen(new IntakeShootPosition(m_intakepos).withTimeout(1))
-            .andThen(new IntakeDown(m_intakepos).withTimeout(1))
+            
            
         );                                                                                                                
         return routine;
