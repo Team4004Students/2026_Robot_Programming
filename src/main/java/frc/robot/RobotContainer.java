@@ -16,11 +16,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -33,8 +31,6 @@ import frc.robot.commands.IntakeDown;
 import frc.robot.commands.ClimberDown;
 import frc.robot.commands.ClimberUp;
 import frc.robot.commands.IntakeUp;
-import frc.robot.commands.LoadRobotSettings;
-import frc.robot.commands.SaveRobotSettings;
 import frc.robot.commands.IntakeRun;
 import frc.robot.commands.IntakeShootPosition;
 import frc.robot.commands.IntakeStop;
@@ -93,16 +89,12 @@ public class RobotContainer {
     public final Indexer indexer = new Indexer(() -> hid1.button(5).getAsBoolean());
     public final Climber climber = new Climber();
 
-    public final LoadRobotSettings loadRobotSettings = new LoadRobotSettings();
-    public final SaveRobotSettings saveRobotSettings = new SaveRobotSettings();
-
     /* Path follower */
     private final AutoFactory autoFactory;
     private final AutoRoutines autoRoutines;
     private final AutoChooser autoChooser = new AutoChooser();
 
     public RobotContainer() {
-        CommandScheduler.getInstance().schedule(loadRobotSettings);
 
         //INITIALIZE PATH FOLLOWING
         autoFactory = drivetrain.createAutoFactory();
@@ -178,7 +170,6 @@ public class RobotContainer {
         driveJoystick.button(10).and(shooter::atSpeed).and(drivetrain::isPointedAtHub).whileTrue(new IndexerRun(indexer));
         driveJoystick.button(10).and(shooter::atSpeed).and(drivetrain::isPointedAtHub).whileTrue(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(intakePosition).withTimeout(2), new IntakeDown(intakePosition).withTimeout(2))));
         driveJoystick.button(12).onTrue(Commands.runOnce(intakePosition::seedMotorEncoder));
-<<<<<<< HEAD
         driveJoystick.button(7).onTrue(new InstantCommand(() -> SpeedLimit += 0.1));
         driveJoystick.button(8).onTrue(new InstantCommand(() -> SpeedLimit -= 0.1));
         driveJoystick.button(6).onTrue(new InstantCommand(() -> Shooter.shooterSpeed += 1.0));
@@ -186,14 +177,6 @@ public class RobotContainer {
  
         // XLOCK - DOES IT WORK?!
         driveJoystick.button(5).whileTrue(drivetrain.applyRequest(() -> xLockRequest));
-=======
-        //driveJoystick.button(7).onTrue(new InstantCommand(() -> SpeedLimit += 0.1));
-        //driveJoystick.button(8).onTrue(new InstantCommand(() -> SpeedLimit -= 0.1));
-        //driveJoystick.button(6).onTrue(new InstantCommand(() -> Shooter.shooterSpeed += 1.0));
-        //driveJoystick.button(5).onTrue(new InstantCommand(() -> Shooter.shooterSpeed -= 1.0));
-        //driveJoystick.button(5).onTrue(Commands.runOnce(saveRobotSettings));
-        
->>>>>>> f39706ab79f59110f09083fbe770dca47ed20766
 
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
@@ -206,14 +189,6 @@ public class RobotContainer {
                     .withRotationalRate(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-hid1.getX() * 1.425,Steerdeadband),Exponent) * MaxAngularRate, -TurnSpeedLimit, TurnSpeedLimit)) // Drive counterclockwise with negative X (left)
             )
         ); 
-
-        if (driveJoystick.getX() > 0.05 || driveJoystick.getY() > 0.05 || hid1.getX() > 0.05 ) {
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
-                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
-                    .withRotationalRate(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-hid1.getX() * 1.425,Steerdeadband),Exponent) * MaxAngularRate, -TurnSpeedLimit, TurnSpeedLimit)) // Drive counterclockwise with negative X (left)
-            );
-        }
 
         driveJoystick.button(1).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
                 drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -turtleMode, turtleMode)) // Drive forward with negative Y (forward)
