@@ -13,6 +13,7 @@ import choreo.auto.AutoFactory;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
@@ -48,6 +49,7 @@ import frc.robot.commands.IndexerStop;
 import frc.robot.commands.AutoShooter;
 import java.util.function.BooleanSupplier;
 
+
 public class RobotContainer {
     public static double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -62,6 +64,8 @@ public class RobotContainer {
     private final double Deadband = 0.1;
     private final double Steerdeadband = 0.05;
     private final double Exponent = 1.0;
+
+    private final SwerveRequest.SwerveDriveBrake xLockRequest = new SwerveRequest.SwerveDriveBrake();
 
     private NetworkTable speedLimitTable = NetworkTableInstance.getDefault().getTable("Speed Limit");
 
@@ -158,7 +162,7 @@ public class RobotContainer {
         hid1.button(7).whileTrue(new ShooterRun(shooter));
         hid1.button(6).and(shooter::atSpeed).whileTrue(new IndexerRun(indexer));
         hid1.button(6).whileTrue(new RepeatCommand(new SequentialCommandGroup(new IntakeShootPosition(intakePosition).withTimeout(2), new IntakeDown(intakePosition).withTimeout(2))));
-       // hid1.button(8).whileTrue(new ShooterStop(shooter));
+        // hid1.button(8).whileTrue(new ShooterStop(shooter));
         //hid1.button(7).and(hid1.button(8)).whileFalse(new AutoShooter(shooter));
 
         driveJoystick.button(9).whileTrue(new IntakeBumpPosition(intakePosition).withTimeout(2));
@@ -170,7 +174,9 @@ public class RobotContainer {
         driveJoystick.button(8).onTrue(new InstantCommand(() -> SpeedLimit -= 0.1));
         driveJoystick.button(6).onTrue(new InstantCommand(() -> Shooter.shooterSpeed += 1.0));
         driveJoystick.button(5).onTrue(new InstantCommand(() -> Shooter.shooterSpeed -= 1.0));
-        
+ 
+        // XLOCK - DOES IT WORK?!
+        driveJoystick.button(5).whileTrue(drivetrain.applyRequest(() -> xLockRequest));
 
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
@@ -260,4 +266,5 @@ public class RobotContainer {
         );
         */
     }
+    
 }
