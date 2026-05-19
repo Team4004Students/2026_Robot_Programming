@@ -182,45 +182,72 @@ public class RobotContainer {
         // and Y is defined as to the left according to WPILib convention.
 
         drivetrain.setDefaultCommand(
-            // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
-                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
-                    .withRotationalRate(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-hid1.getX() * 1.425,Steerdeadband),Exponent) * MaxAngularRate, -TurnSpeedLimit, TurnSpeedLimit)) // Drive counterclockwise with negative X (left)
-            )
-        ); 
+            drivetrain.applyRequest(() -> {
 
-        driveJoystick.button(1).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
-                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -turtleMode, turtleMode)) // Drive forward with negative Y (forward)
-                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -turtleMode, turtleMode)) // Drive left with negative X (left)
-                    .withRotationalRate(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-hid1.getX(),Steerdeadband),Exponent) * MaxAngularRate, -turtleModeTurn, turtleModeTurn))) // Drive counterclockwise with negative X (left)
-            )
+
+            double speedModifier = SpeedLimit;
+            double turnModifier = TurnSpeedLimit;
+                if (driveJoystick.button(1).getAsBoolean()) {speedModifier = turtleMode; turnModifier = turtleModeTurn;}
+                if (driveJoystick.button(2).getAsBoolean()) {speedModifier = turboMode; turnModifier = turboModeTurn;}
+
+                double x =
+                    MathUtil.clamp(
+                        Math.pow(
+                            MathUtil.applyDeadband(-driveJoystick.getY(), Deadband),
+                            Exponent
+                        ) * MaxSpeed,
+                        -speedModifier,
+                        speedModifier
+                    );
+
+                double y =
+                    MathUtil.clamp(
+                        Math.pow(
+                            MathUtil.applyDeadband(-driveJoystick.getX(), Deadband),
+                            Exponent
+                        ) * MaxSpeed,
+                        -speedModifier,
+                        speedModifier
+                    );
+
+                double rot =
+                    MathUtil.clamp(
+                        Math.pow(
+                            MathUtil.applyDeadband(-hid1.getX() * 1.425, Steerdeadband),
+                            Exponent
+                        ) * MaxAngularRate,
+                        -turnModifier,
+                        turnModifier
+                    );
+
+
+            if (driveJoystick.button(9).getAsBoolean()) {rot = drivetrain.bumpAssist() * MaxAngularRate;}
+            if (driveJoystick.button(10).getAsBoolean()) {rot = drivetrain.pointAtHub() * MaxAngularRate;}
+
+
+
+                boolean moving =
+                    Math.abs(x) > 0 ||
+                    Math.abs(y) > 0 ||
+                    Math.abs(rot) > 0;
+
+
+                // NORMAL DRIVE
+                if (moving) {
+
+                    return drive
+                        .withVelocityX(x)
+                        .withVelocityY(y)
+                        .withRotationalRate(rot);
+
+                } else {
+
+                    return xLockRequest;
+                }
+
+            })
         );
 
-        driveJoystick.button(2).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
-                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -turboMode, turboMode)) // Drive forward with negative Y (forward)
-                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -turboMode, turboMode)) // Drive left with negative X (left)
-                    .withRotationalRate(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-hid1.getX() * 2.85,Steerdeadband),Exponent) * MaxAngularRate, -turboModeTurn, turboModeTurn))) // Drive counterclockwise with negative X (left)
-            )
-        );
-
-        driveJoystick.button(10).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
-                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
-                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
-                    .withRotationalRate(drivetrain.pointAtHub() * MaxAngularRate)) // Drive counterclockwise with negative X (left)
-            )
-        );
-
-        driveJoystick.button(9).whileTrue(new RepeatCommand(drivetrain.applyRequest(() ->
-                drive.withVelocityX(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getY(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive forward with negative Y (forward)
-                    .withVelocityY(MathUtil.clamp(Math.pow(MathUtil.applyDeadband(-driveJoystick.getX(),Deadband),Exponent) * MaxSpeed, -SpeedLimit, SpeedLimit)) // Drive left with negative X (left)
-                    .withRotationalRate(drivetrain.bumpAssist() * MaxAngularRate)) // Drive counterclockwise with negative X (left)
-            )
-        );
-
-       /*if driveJoystick.button(9) {
-            (new IntakeBumpPosition(intakePosition));
-        } else {}*/
 
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
